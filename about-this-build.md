@@ -2,18 +2,16 @@
 
 # About this build
 
-This documentation was built on **2026-09-25 10:07 UTC** from commit <a href="https://github.com/thorwhalen/griot/commit/524d34f94d42e989d559d9e7a9db48bab3c0a268"><code>524d34f</code></a> on branch <code>main</code>, for **griot 0.0.2** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-09-25 11:07 UTC** from commit <a href="https://github.com/thorwhalen/griot/commit/3799dbeae804094e89bf9f421e4d8c6586042eac"><code>3799dbe</code></a> on branch <code>main</code>, for **griot 0.0.3** (from <code>pyproject.toml</code>).
 
-#### WARNING
-The documentation and the package may be misaligned:
-
-- The documented version (0.0.2) is behind the latest release on PyPI (0.0.3): `pip install griot` gives newer code than these docs describe.
+#### NOTE
+Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/griot/commit/524d34f94d42e989d559d9e7a9db48bab3c0a268"><code>524d34f94d42e989d559d9e7a9db48bab3c0a268</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/griot/commit/3799dbeae804094e89bf9f421e4d8c6586042eac"><code>3799dbeae804094e89bf9f421e4d8c6586042eac</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -24,9 +22,9 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/griot</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/griot/actions/runs/36122065610">36122065610</a>     |
+| Run          | <a href="https://github.com/thorwhalen/griot/actions/runs/36127571778">36127571778</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>524d34f94d42e989d559d9e7a9db48bab3c0a268</code> (in the history of the built commit) |
+| Event commit | <code>3799dbeae804094e89bf9f421e4d8c6586042eac</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -51,13 +49,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/griot/0.0.3/">0.0.3</a>, newer than the documented version (0.0.2).
+Latest release: <a href="https://pypi.org/project/griot/0.0.3/">0.0.3</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/griot && cd griot
-git checkout 524d34f94d42e989d559d9e7a9db48bab3c0a268
+git checkout 3799dbeae804094e89bf9f421e4d8c6586042eac
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
