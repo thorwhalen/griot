@@ -1,0 +1,17 @@
+# griot
+
+> Research a subject and write a spoken commentary script for it — reusable writers for braidio productions
+
+
+## Pages in this subsection
+
+- [griot](griot.html.md): griot — research a subject, then write the spoken commentary about it.
+- [griot.dossier](griot.dossier.html.md): The dossier — what research found, in one record the writer reads.
+- [griot.gates](griot.gates.html.md): Gates — what a draft must pass before it is voiced, and what it failed.
+- [griot.style](griot.style.html.md): The style library — the voice guide, the checklist, twenty critic voices.
+- [griot.tools](griot.tools.html.md): The SSOT verbs — plain functions, JSON-able in, JSON-able out.
+- [griot.writers](griot.writers.html.md): Writers — reusable, parametrized authors of spoken commentary.
+
+## Optional
+
+- [Top-level llms.txt](../llms.txt): Complete documentation index.

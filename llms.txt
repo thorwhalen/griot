@@ -1,0 +1,25 @@
+# griot
+
+> Research a subject and write a spoken commentary script for it — reusable writers for braidio productions
+
+
+## Pages
+
+- [griot](index.html.md): Research a subject, then write the spoken commentary about it — reusable, parametrized &#42;&#42;writers&#42;&#42; f...
+- [API reference](api.html.md): | &#96;griot&#96;   | griot — research a subject, then write the spoken commentary about it.   |
+- [griot](_autosummary/griot.html.md): griot — research a subject, then write the spoken commentary about it.
+- [griot.dossier](_autosummary/griot.dossier.html.md): The dossier — what research found, in one record the writer reads.
+- [griot.gates](_autosummary/griot.gates.html.md): Gates — what a draft must pass before it is voiced, and what it failed.
+- [griot.style](_autosummary/griot.style.html.md): The style library — the voice guide, the checklist, twenty critic voices.
+- [griot.tools](_autosummary/griot.tools.html.md): The SSOT verbs — plain functions, JSON-able in, JSON-able out.
+- [griot.writers](_autosummary/griot.writers.html.md): Writers — reusable, parametrized authors of spoken commentary.
+- [For AI agents](ai-agents.html.md): &#96;griot&#96; ships artifacts for coding agents alongside its code. This page lists
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-09-25 09:56 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
+
+## Optional
+
+- [griot.md](griot.md): Complete documentation in a single file.
+
+## Build
+
+- [build_info.json](build_info.json): build provenance (commit, version, tool versions, whether the docs match the package)

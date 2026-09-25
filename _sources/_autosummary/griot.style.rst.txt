@@ -1,0 +1,15 @@
+griot.style
+===========
+
+.. automodule:: griot.style
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      checklist
+      list_voices
+      voice_card
+      voice_guide_rules
+   

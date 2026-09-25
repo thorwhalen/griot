@@ -1,0 +1,22 @@
+griot.dossier
+=============
+
+.. automodule:: griot.dossier
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      merge
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Annotation
+      Dossier
+      Fact
+      Source
+      TimedLine
+   

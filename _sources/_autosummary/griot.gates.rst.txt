@@ -1,0 +1,19 @@
+griot.gates
+===========
+
+.. automodule:: griot.gates
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      run_gates
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Finding
+      GateReport
+   

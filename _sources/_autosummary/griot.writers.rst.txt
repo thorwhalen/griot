@@ -1,0 +1,34 @@
+griot.writers
+=============
+
+.. automodule:: griot.writers
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_MODEL
+      WRITERS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      draft_from_reply
+      get_writer
+      plan_write
+      quote
+      register_writer
+      script_to_json
+      write
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Draft
+      PictureHint
+      Quote
+      Writer
+   

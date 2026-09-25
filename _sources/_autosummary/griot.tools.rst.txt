@@ -1,0 +1,15 @@
+griot.tools
+===========
+
+.. automodule:: griot.tools
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      quote
+      research
+      write
+      writers
+   

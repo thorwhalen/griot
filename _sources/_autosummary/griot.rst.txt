@@ -1,0 +1,55 @@
+﻿griot
+=====
+
+.. automodule:: griot
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_prompt
+      checklist
+      draft_from_reply
+      get_writer
+      list_voices
+      merge
+      plan_write
+      quote
+      register_researcher
+      register_writer
+      research
+      run_gates
+      voice_card
+      write
+      writer_from_markdown
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Annotation
+      Dossier
+      Draft
+      Fact
+      Finding
+      GateReport
+      Http
+      HttpxHttp
+      PictureHint
+      Quote
+      Source
+      TimedLine
+      Writer
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   dossier
+   gates
+   style
+   tools
+   writers
