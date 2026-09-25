@@ -138,23 +138,34 @@ class Dossier:
             lines = [f"- {f.text}  [{f.source_url}]" for f in self.facts]
             parts.append("=== FACTS (each with its source) ===\n" + "\n".join(lines))
         if self.lyrics:
-            parts.append(f"=== FULL LYRICS (verbatim; do NOT quote at length) ===\n{self.lyrics.strip()}")
+            parts.append(
+                f"=== FULL LYRICS (verbatim; do NOT quote at length) ===\n{self.lyrics.strip()}"
+            )
         if self.timed_lines:
             lines = [f"[{t.index:02d}] {t.text}" for t in self.timed_lines]
-            parts.append("=== TIMED LINES (exact text; these are the only clips that can be cut) ===\n" + "\n".join(lines))
+            parts.append(
+                "=== TIMED LINES (exact text; these are the only clips that can be cut) ===\n"
+                + "\n".join(lines)
+            )
         if self.annotations:
             top = sorted(self.annotations, key=lambda a: (-int(a.verified), -a.votes))
             lines = []
             for a in top[:max_annotations]:
                 tag = "VERIFIED" if a.verified else f"{a.votes} votes"
                 lines.append(f'- "{a.fragment}" ({tag}): {a.body[:annotation_chars]}')
-            parts.append("=== ANNOTATIONS (mine for the concrete and the surprising) ===\n" + "\n".join(lines))
+            parts.append(
+                "=== ANNOTATIONS (mine for the concrete and the surprising) ===\n"
+                + "\n".join(lines)
+            )
         if self.sources:
             lines = [f"- {s.title or s.url} <{s.url}>" for s in self.sources]
             parts.append("=== SOURCES CONSULTED ===\n" + "\n".join(lines))
         if self.missing:
             lines = [f"- {m}" for m in self.missing]
-            parts.append("=== NOT FOUND (say so if it matters; never invent it) ===\n" + "\n".join(lines))
+            parts.append(
+                "=== NOT FOUND (say so if it matters; never invent it) ===\n"
+                + "\n".join(lines)
+            )
         return "\n\n".join(parts)
 
 
@@ -183,6 +194,7 @@ def merge(topic: str, parts: Iterable[Dossier]) -> Dossier:
                     seq.append(item)
             out[f.name] = tuple(seq)
         else:
-            out[f.name] = next((v for v in values if v), Dossier.__dataclass_fields__[f.name].default)
+            out[f.name] = next(
+                (v for v in values if v), Dossier.__dataclass_fields__[f.name].default
+            )
     return Dossier(**out)
-

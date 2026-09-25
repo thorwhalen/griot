@@ -11,13 +11,17 @@ pip install griot
 ```python
 import griot
 
-w = griot.get_writer("song")                                   # general | technical | song
-dossier = griot.research("The Sound of Silence by Simon & Garfunkel", researchers=w.researchers)
-q = griot.quote(w, dossier, minutes=3)      # priced before anything runs
-draft = griot.write(w, dossier, minutes=3)  # one LLM call (+ one gated revision), cached
-draft.script                                 # a braidio.Script — voice it with braidio.weave_project
-draft.picture_hints                          # one per beat, with why
-draft.ok, draft.report                       # the gates' verdict and findings
+w = griot.get_writer("song")  # general | technical | song
+dossier = griot.research(
+    "The Sound of Silence by Simon & Garfunkel", researchers=w.researchers
+)
+q = griot.quote(w, dossier, minutes=3)  # priced before anything runs
+draft = griot.write(
+    w, dossier, minutes=3
+)  # one LLM call (+ one gated revision), cached
+draft.script  # a braidio.Script — voice it with braidio.weave_project
+draft.picture_hints  # one per beat, with why
+draft.ok, draft.report  # the gates' verdict and findings
 ```
 
 Or from the shell: `python -m griot write "Trinity Church Manhattan" --writer general --out draft.json` (`--fake` runs the whole path with no key and no spend).

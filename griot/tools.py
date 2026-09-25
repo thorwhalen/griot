@@ -44,7 +44,9 @@ def research(topic: str, *, writer: str = "general") -> dict[str, Any]:
     return _research(topic, researchers=w.researchers).to_dict()
 
 
-def quote(topic: str, *, writer: str = "general", minutes: float = 0.0) -> dict[str, Any]:
+def quote(
+    topic: str, *, writer: str = "general", minutes: float = 0.0
+) -> dict[str, Any]:
     """Price the write and the voicing for ``topic`` before spending anything (research runs; it is free)."""
     w = get_writer(writer)
     d = _research(topic, researchers=w.researchers)
@@ -73,7 +75,9 @@ def write(
     payload = draft.to_dict()
     payload["dossier"] = d.to_dict()
     if out:
-        Path(out).write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        Path(out).write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
         payload["written_to"] = out
     return payload
 
@@ -90,9 +94,51 @@ def _fake_complete(w, d: Dossier, minutes: float):
         words: list[str] = []
         k = 0
         while len(words) < per:
-            words.extend([tags[(i + k) % len(tags)], "about", subject + ",", "and", "then", "what", "it", "meant", "to", "them", "that", "year", "in", "the", "city."])
+            words.extend(
+                [
+                    tags[(i + k) % len(tags)],
+                    "about",
+                    subject + ",",
+                    "and",
+                    "then",
+                    "what",
+                    "it",
+                    "meant",
+                    "to",
+                    "them",
+                    "that",
+                    "year",
+                    "in",
+                    "the",
+                    "city.",
+                ]
+            )
             k += 1
-        beats.append({"type": "narration", "text": " ".join(words[:per + 3]), "role": "record" if i == 2 else "presenter", "lead_gap_s": 0.4 if i else 0.0})
-    hints = [{"beat_index": i, "query": f"{subject} beat {i}", "subject": subject, "why": "fake", "source": None} for i in range(n_beats)]
-    reply = json.dumps({"title": subject, "id_slug": "fake", "beats": beats, "picture_hints": hints, "sources_used": [s.url for s in d.sources]})
+        beats.append(
+            {
+                "type": "narration",
+                "text": " ".join(words[: per + 3]),
+                "role": "record" if i == 2 else "presenter",
+                "lead_gap_s": 0.4 if i else 0.0,
+            }
+        )
+    hints = [
+        {
+            "beat_index": i,
+            "query": f"{subject} beat {i}",
+            "subject": subject,
+            "why": "fake",
+            "source": None,
+        }
+        for i in range(n_beats)
+    ]
+    reply = json.dumps(
+        {
+            "title": subject,
+            "id_slug": "fake",
+            "beats": beats,
+            "picture_hints": hints,
+            "sources_used": [s.url for s in d.sources],
+        }
+    )
     return lambda plan: (reply, 0.0)

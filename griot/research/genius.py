@@ -42,17 +42,27 @@ BROWSER_UA = (
 """The public endpoints and the song pages want a browser-like UA."""
 
 MAX_ANNOTATIONS = 24
-_JUNK_SELECTORS = ('[class*="LyricsHeader"]', '[class*="RightSidebar"]', '[class*="Ad__"]', "[data-exclude-from-selection]")
+_JUNK_SELECTORS = (
+    '[class*="LyricsHeader"]',
+    '[class*="RightSidebar"]',
+    '[class*="Ad__"]',
+    "[data-exclude-from-selection]",
+)
 
 
 def _api(token: str | None) -> tuple[str, dict[str, str]]:
     """``(base_url, headers)`` — the official API when a token is set, else the public one."""
     if token:
-        return OFFICIAL_API, {"Authorization": f"Bearer {token}", "Accept": "application/json"}
+        return OFFICIAL_API, {
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/json",
+        }
     return PUBLIC_API, {"User-Agent": BROWSER_UA, "Accept": "application/json"}
 
 
-def search_songs(http: Http, query: str, *, limit: int = 5, token: str | None = None) -> list[dict[str, Any]]:
+def search_songs(
+    http: Http, query: str, *, limit: int = 5, token: str | None = None
+) -> list[dict[str, Any]]:
     """Song stubs matching ``query``, best first (each has ``id``, ``title``, ``url``)."""
     base, headers = _api(token)
     path = "/search" if token else "/search/song"
@@ -65,17 +75,31 @@ def search_songs(http: Http, query: str, *, limit: int = 5, token: str | None = 
 def song(http: Http, song_id: int, *, token: str | None = None) -> dict[str, Any]:
     """The full song object."""
     base, headers = _api(token)
-    return http.json(f"{base}/songs/{song_id}", params={"text_format": "plain"}, headers=headers)["response"]["song"]
+    return http.json(
+        f"{base}/songs/{song_id}", params={"text_format": "plain"}, headers=headers
+    )["response"]["song"]
 
 
-def referents(http: Http, song_id: int, *, per_page: int = 50, max_pages: int = 6, token: str | None = None) -> list[dict[str, Any]]:
+def referents(
+    http: Http,
+    song_id: int,
+    *,
+    per_page: int = 50,
+    max_pages: int = 6,
+    token: str | None = None,
+) -> list[dict[str, Any]]:
     """Every referent (annotated fragment) for a song, paginated."""
     base, headers = _api(token)
     out: list[dict[str, Any]] = []
     for page in range(1, max_pages + 1):
         resp = http.json(
             f"{base}/referents",
-            params={"song_id": song_id, "text_format": "plain", "per_page": per_page, "page": page},
+            params={
+                "song_id": song_id,
+                "text_format": "plain",
+                "per_page": per_page,
+                "page": page,
+            },
             headers=headers,
         )["response"]
         refs = resp.get("referents") or []
@@ -92,7 +116,9 @@ def extract_lyrics(html: str) -> str:
     if not containers:
         legacy = soup.select_one(".lyrics")
         containers = [legacy] if legacy else []
-    text = "\n".join(t for t in (_container_text(c) for c in containers if c is not None) if t)
+    text = "\n".join(
+        t for t in (_container_text(c) for c in containers if c is not None) if t
+    )
     text = text.replace("\r\n", "\n").replace("\xa0", " ")
     text = "\n".join(line.rstrip() for line in text.split("\n"))
     return re.sub(r"\n{3,}", "\n\n", text).strip()
@@ -153,11 +179,21 @@ def genius(topic: str, *, prior: Dossier, http: Http) -> Dossier:
     wanted = content_words(work)
     top = next((s for s in stubs if content_words(s.get("title") or "") & wanted), None)
     if top is None:
-        nearest = ", ".join((s.get("full_title") or s.get("title") or "?") for s in stubs[:3])
-        return Dossier(topic=topic, missing=(f"genius: no song matching {query!r}" + (f" (nearest: {nearest})" if nearest else ""),))
+        nearest = ", ".join(
+            (s.get("full_title") or s.get("title") or "?") for s in stubs[:3]
+        )
+        return Dossier(
+            topic=topic,
+            missing=(
+                f"genius: no song matching {query!r}"
+                + (f" (nearest: {nearest})" if nearest else ""),
+            ),
+        )
     full = song(http, int(top["id"]), token=token)
     title = full.get("title") or top.get("title") or ""
-    artist = (full.get("primary_artist") or {}).get("name") or (top.get("primary_artist") or {}).get("name")
+    artist = (full.get("primary_artist") or {}).get("name") or (
+        top.get("primary_artist") or {}
+    ).get("name")
     url = full.get("url") or top.get("url") or ""
     missing: list[str] = []
     lyrics = ""
@@ -180,6 +216,8 @@ def genius(topic: str, *, prior: Dossier, http: Http) -> Dossier:
         summary=summary,
         lyrics=lyrics or None,
         annotations=tuple(anns),
-        sources=(Source(url=url, title=full.get("full_title") or title, kind="genius"),),
+        sources=(
+            Source(url=url, title=full.get("full_title") or title, kind="genius"),
+        ),
         missing=tuple(missing),
     )

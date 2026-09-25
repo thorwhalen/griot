@@ -20,7 +20,24 @@ PAGE = "https://en.wikipedia.org/wiki/"
 MAX_EXTRACT_CHARS = 6000
 """How much of the page's plain extract becomes facts (the lead and a little)."""
 
-_STOP = {"the", "a", "an", "of", "and", "in", "on", "by", "to", "for", "is", "song", "about", "film", "book", "album"}
+_STOP = {
+    "the",
+    "a",
+    "an",
+    "of",
+    "and",
+    "in",
+    "on",
+    "by",
+    "to",
+    "for",
+    "is",
+    "song",
+    "about",
+    "film",
+    "book",
+    "album",
+}
 
 
 def content_words(text: str) -> set[str]:
@@ -41,7 +58,9 @@ def split_topic(topic: str) -> tuple[str, str | None]:
     return topic.strip().strip('"'), None
 
 
-def best_hit(results: list[dict], work: str, *, artist: str | None = None) -> dict | None:
+def best_hit(
+    results: list[dict], work: str, *, artist: str | None = None
+) -> dict | None:
     """The hit whose title is most nearly the work; ``None`` when no title shares a content word.
 
     Score = precision (share of the title's content words found in the work)
@@ -97,15 +116,26 @@ def wikipedia(topic: str, *, prior: Dossier, http: Http) -> Dossier:
     query = f'"{work}" {artist}' if artist else work
     hits = http.json(
         API,
-        params={"action": "query", "list": "search", "srsearch": query, "srlimit": 6, "format": "json"},
+        params={
+            "action": "query",
+            "list": "search",
+            "srsearch": query,
+            "srlimit": 6,
+            "format": "json",
+        },
     )
     results = (hits.get("query") or {}).get("search") or []
     if not results:
-        return Dossier(topic=topic, missing=(f"wikipedia: no page found for {query!r}",))
+        return Dossier(
+            topic=topic, missing=(f"wikipedia: no page found for {query!r}",)
+        )
     top = best_hit(results, work, artist=artist)
     if top is None:
         titles = ", ".join(r["title"] for r in results[:3])
-        return Dossier(topic=topic, missing=(f"wikipedia: nothing matching {query!r} (nearest: {titles})",))
+        return Dossier(
+            topic=topic,
+            missing=(f"wikipedia: nothing matching {query!r} (nearest: {titles})",),
+        )
     title = top["title"]
     url = PAGE + title.replace(" ", "_")
 
@@ -115,7 +145,14 @@ def wikipedia(topic: str, *, prior: Dossier, http: Http) -> Dossier:
 
     page = http.json(
         API,
-        params={"action": "query", "prop": "extracts", "explaintext": 1, "titles": title, "format": "json", "redirects": 1},
+        params={
+            "action": "query",
+            "prop": "extracts",
+            "explaintext": 1,
+            "titles": title,
+            "format": "json",
+            "redirects": 1,
+        },
     )
     pages = (page.get("query") or {}).get("pages") or {}
     extract = next(iter(pages.values()), {}).get("extract", "") if pages else ""

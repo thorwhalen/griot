@@ -26,14 +26,20 @@ python -m griot writers      # the three shipped writers
 ```python
 import griot
 
-w = griot.get_writer("song")                                   # general | technical | song
-dossier = griot.research("The Sound of Silence by Simon & Garfunkel", researchers=w.researchers)
-q = griot.quote(w, dossier, minutes=3)      # priced BEFORE anything runs: q.total_usd, q.has_unknown_costs
-draft = griot.write(w, dossier, minutes=3)  # one LLM call (+ at most one gated revision), content-cached
-draft.script            # a braidio.Script — hand it to braidio.weave_project / render_format
-draft.picture_hints     # one per beat: query, subject label, why — the picture track's provenance
-draft.report            # the gates' findings; empty when it passed
-draft.ok                # False means: read the report, do not voice it yet
+w = griot.get_writer("song")  # general | technical | song
+dossier = griot.research(
+    "The Sound of Silence by Simon & Garfunkel", researchers=w.researchers
+)
+q = griot.quote(
+    w, dossier, minutes=3
+)  # priced BEFORE anything runs: q.total_usd, q.has_unknown_costs
+draft = griot.write(
+    w, dossier, minutes=3
+)  # one LLM call (+ at most one gated revision), content-cached
+draft.script  # a braidio.Script — hand it to braidio.weave_project / render_format
+draft.picture_hints  # one per beat: query, subject label, why — the picture track's provenance
+draft.report  # the gates' findings; empty when it passed
+draft.ok  # False means: read the report, do not voice it yet
 ```
 
 CLI: `python -m griot quote "<topic>" --writer song --minutes 3`, `python -m griot write "<topic>" --writer general --out draft.json`, and `--fake` to run the whole path with no key and no spend.

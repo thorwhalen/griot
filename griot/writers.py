@@ -91,7 +91,13 @@ class Writer:
     words_per_minute: int = 150
     max_revisions: int = 1
     model: str = DEFAULT_MODEL
-    gates: tuple[str, ...] = ("platitudes", "expressiveness", "lyric_leak", "length", "shape")
+    gates: tuple[str, ...] = (
+        "platitudes",
+        "expressiveness",
+        "lyric_leak",
+        "length",
+        "shape",
+    )
     default_minutes: int = 3
 
     def target_words(self, minutes: float) -> int:
@@ -135,7 +141,9 @@ class Draft:
         return self.report.ok
 
     def narration_text(self) -> str:
-        return "\n\n".join(b.text for b in self.script.beats if isinstance(b, braidio.Narration))
+        return "\n\n".join(
+            b.text for b in self.script.beats if isinstance(b, braidio.Narration)
+        )
 
     def to_dict(self) -> dict[str, Any]:
         """JSON-able; the script in braidio's JSON shape (a ``type`` per beat)."""
@@ -145,7 +153,9 @@ class Draft:
             "minutes": self.minutes,
             "revisions": self.revisions,
             "ok": self.ok,
-            "findings": [{"gate": f.gate, "message": f.message} for f in self.report.findings],
+            "findings": [
+                {"gate": f.gate, "message": f.message} for f in self.report.findings
+            ],
             "cost_usd_actual": self.cost_usd_actual,
             "script": script_to_json(self.script),
             "picture_hints": [h.__dict__ for h in self.picture_hints],
@@ -190,7 +200,12 @@ class Quote:
         }
 
 
-_BEAT_TYPES = {braidio.Narration: "narration", braidio.SegmentBeat: "segment", braidio.Dialogue: "dialogue", braidio.SceneBreak: "scene_break"}
+_BEAT_TYPES = {
+    braidio.Narration: "narration",
+    braidio.SegmentBeat: "segment",
+    braidio.Dialogue: "dialogue",
+    braidio.SceneBreak: "scene_break",
+}
 
 
 def script_to_json(script: braidio.Script) -> dict[str, Any]:
@@ -338,9 +353,13 @@ def build_prompt(
         f"Delivery: {fmt.narration_delivery.model_id} ({'renders [audio tags]' if fmt.narration_delivery.supports_audio_tags else 'reads tags as text — use none'}).",
     ]
     if dossier.timed_lines:
-        job.append("Source clips: TIMED LINES are available; you may cut 2–4 short segments (1–3 consecutive lines each), placed before/after/under a beat. Their rights are third-party.")
+        job.append(
+            "Source clips: TIMED LINES are available; you may cut 2–4 short segments (1–3 consecutive lines each), placed before/after/under a beat. Their rights are third-party."
+        )
     else:
-        job.append("Source clips: none available. Narration only — do not emit segment beats.")
+        job.append(
+            "Source clips: none available. Narration only — do not emit segment beats."
+        )
     if angle:
         job.append(f"The angle the user asked for: {angle}")
     parts.append("=== THE JOB ===\n" + "\n".join(job))
@@ -368,7 +387,14 @@ def plan_write(
     previous: dict[str, Any] | None = None,
 ) -> Plan:
     """The one-call falaw plan for a write (or a revision). Pure; spends nothing."""
-    system, user = build_prompt(writer, dossier, minutes=minutes, angle=angle, findings=findings, previous=previous)
+    system, user = build_prompt(
+        writer,
+        dossier,
+        minutes=minutes,
+        angle=angle,
+        findings=findings,
+        previous=previous,
+    )
     target = writer.target_words(minutes)
     call = plan_llm_complete(
         user,
@@ -376,16 +402,24 @@ def plan_write(
         model=writer.model,
         temperature=TEMPERATURE,
         output_kind="json",
-        input_tokens=len(user.encode("utf-8")) + len(system.encode("utf-8")),  # upper bound: a token per byte
+        input_tokens=len(user.encode("utf-8"))
+        + len(system.encode("utf-8")),  # upper bound: a token per byte
         max_output_tokens=max(OUTPUT_TOKENS_FLOOR, target * OUTPUT_TOKENS_PER_WORD),
         metadata={
-            "griot": {"writer": writer.name, "format": writer.format_id, "minutes": minutes, "revision": previous is not None}
+            "griot": {
+                "writer": writer.name,
+                "format": writer.format_id,
+                "minutes": minutes,
+                "revision": previous is not None,
+            }
         },
     )
     return Plan(calls=(call,))
 
 
-def quote(writer: Writer | str, dossier: Dossier, *, minutes: float | None = None) -> Quote:
+def quote(
+    writer: Writer | str, dossier: Dossier, *, minutes: float | None = None
+) -> Quote:
     """Price the write (all its calls) and the voicing (from the word budget)."""
     w = get_writer(writer)
     minutes = w.default_minutes if minutes is None else minutes
@@ -429,7 +463,9 @@ def draft_from_reply(
     try:
         obj = json.loads(_fence_strip(reply))
     except json.JSONDecodeError as e:
-        raise ValueError(f"the writer's reply was not valid JSON ({e}); first 200 chars: {reply[:200]!r}") from e
+        raise ValueError(
+            f"the writer's reply was not valid JSON ({e}); first 200 chars: {reply[:200]!r}"
+        ) from e
     if not isinstance(obj, dict) or not isinstance(obj.get("beats"), list):
         raise ValueError("the writer's reply is not an object with a 'beats' list")
 
@@ -463,7 +499,11 @@ def draft_from_reply(
                 dropped.append(f"beat {i}: segment {ref!r} does not name a timed line")
                 continue
             placement = b.get("placement") or "before"
-            beats.append(braidio.SegmentBeat(ref, rights="copyright-third-party", placement=placement))
+            beats.append(
+                braidio.SegmentBeat(
+                    ref, rights="copyright-third-party", placement=placement
+                )
+            )
         else:
             dropped.append(f"beat {i}: unknown beat type {kind!r}")
 
@@ -483,7 +523,12 @@ def draft_from_reply(
             dropped.append(f"picture hint {h!r} is malformed")
 
     title = str(obj.get("title") or dossier.subject or dossier.topic)
-    slug = re.sub(r"[^a-z0-9]+", "-", str(obj.get("id_slug") or title).lower()).strip("-")[:48] or "film"
+    slug = (
+        re.sub(r"[^a-z0-9]+", "-", str(obj.get("id_slug") or title).lower()).strip("-")[
+            :48
+        ]
+        or "film"
+    )
     script = braidio.Script(title=title, id_slug=slug, beats=beats)
 
     narr = [b.text for b in beats if isinstance(b, braidio.Narration)]
@@ -525,7 +570,11 @@ def write(
     """Research → this. Write, gate, revise at most ``max_revisions`` times, return the draft with its report."""
     w = get_writer(writer)
     minutes = w.default_minutes if minutes is None else minutes
-    run: Complete = complete if complete is not None else (lambda p: _complete_via_falaw(p, use_cache=use_cache))
+    run: Complete = (
+        complete
+        if complete is not None
+        else (lambda p: _complete_via_falaw(p, use_cache=use_cache))
+    )
     spent = 0.0
     plan = plan_write(w, dossier, minutes=minutes, angle=angle)
     reply, cost = run(plan)
@@ -534,9 +583,17 @@ def write(
     for n in range(1, w.max_revisions + 1):
         if draft.ok:
             break
-        plan = plan_write(w, dossier, minutes=minutes, angle=angle, findings=draft.report, previous=draft.raw)
+        plan = plan_write(
+            w,
+            dossier,
+            minutes=minutes,
+            angle=angle,
+            findings=draft.report,
+            previous=draft.raw,
+        )
         reply, cost = run(plan)
         spent += cost
-        draft = draft_from_reply(reply, w, dossier, minutes=minutes, revisions=n, cost_usd_actual=spent)
+        draft = draft_from_reply(
+            reply, w, dossier, minutes=minutes, revisions=n, cost_usd_actual=spent
+        )
     return replace(draft, cost_usd_actual=spent)
-

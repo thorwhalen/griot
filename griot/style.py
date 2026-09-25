@@ -26,7 +26,11 @@ def checklist() -> str:
 
 def list_voices() -> list[str]:
     """The voice names available to a writer (file stems under ``voices/``)."""
-    return sorted(p.stem for p in (_style_dir() / "voices").glob("*.md") if not p.stem.startswith("_"))
+    return sorted(
+        p.stem
+        for p in (_style_dir() / "voices").glob("*.md")
+        if not p.stem.startswith("_")
+    )
 
 
 @lru_cache(maxsize=None)

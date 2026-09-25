@@ -51,7 +51,9 @@ class GateReport:
 
     def as_notes(self) -> str:
         """The findings as a numbered list for the revision prompt."""
-        return "\n".join(f"{i}. [{f.gate}] {f.message}" for i, f in enumerate(self.findings, 1))
+        return "\n".join(
+            f"{i}. [{f.gate}] {f.message}" for i, f in enumerate(self.findings, 1)
+        )
 
 
 @dataclass(frozen=True)
@@ -98,7 +100,10 @@ def gate_lyric_leak(d: DraftFacts) -> Iterable[Finding]:
             continue
         norm = re.sub(r"\s+", " ", re.sub(r"[^a-z0-9' ]+", " ", line.lower())).strip()
         if len(norm.split()) >= LYRIC_LEAK_MIN_WORDS and norm in prose:
-            yield Finding("lyric_leak", f"the lyric line {line!r} appears verbatim; quote a fragment, attributed")
+            yield Finding(
+                "lyric_leak",
+                f"the lyric line {line!r} appears verbatim; quote a fragment, attributed",
+            )
 
 
 def gate_length(d: DraftFacts) -> Iterable[Finding]:
@@ -106,16 +111,28 @@ def gate_length(d: DraftFacts) -> Iterable[Finding]:
     lo = int(d.target_words * (1 - LENGTH_TOLERANCE))
     hi = int(d.target_words * (1 + LENGTH_TOLERANCE))
     if n < lo:
-        yield Finding("length", f"{n} words is under the {d.target_words}-word budget (floor {lo}); add substance, not padding")
+        yield Finding(
+            "length",
+            f"{n} words is under the {d.target_words}-word budget (floor {lo}); add substance, not padding",
+        )
     elif n > hi:
-        yield Finding("length", f"{n} words is over the {d.target_words}-word budget (ceiling {hi}); cut, the price was quoted on it")
+        yield Finding(
+            "length",
+            f"{n} words is over the {d.target_words}-word budget (ceiling {hi}); cut, the price was quoted on it",
+        )
 
 
 def gate_shape(d: DraftFacts) -> Iterable[Finding]:
     if d.beat_count < MIN_BEATS:
-        yield Finding("shape", f"{d.beat_count} beats; a film needs at least {MIN_BEATS} so the picture can change")
+        yield Finding(
+            "shape",
+            f"{d.beat_count} beats; a film needs at least {MIN_BEATS} so the picture can change",
+        )
     if d.hinted_beats < d.beat_count:
-        yield Finding("shape", f"{d.beat_count - d.hinted_beats} beat(s) have no picture hint; every beat needs one")
+        yield Finding(
+            "shape",
+            f"{d.beat_count - d.hinted_beats} beat(s) have no picture hint; every beat needs one",
+        )
 
 
 GATES: dict[str, Gate] = {

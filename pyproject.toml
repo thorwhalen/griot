@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "griot"
-version = "0.0.1"
+version = "0.0.2"
 description = "Research a subject and write a spoken commentary script for it — reusable writers for braidio productions"
 readme = "README.md"
 requires-python = ">=3.10"

@@ -44,7 +44,9 @@ def parse_lrc(synced: str) -> list[TimedLine]:
 def fetch_synced(http: Http, *, track: str, artist: str) -> dict[str, Any] | None:
     """The best LRCLIB record with ``syncedLyrics`` for a song, or ``None``."""
     try:
-        rec = http.json(f"{API}/get", params={"track_name": track, "artist_name": artist})
+        rec = http.json(
+            f"{API}/get", params={"track_name": track, "artist_name": artist}
+        )
         if isinstance(rec, dict) and rec.get("syncedLyrics"):
             return rec
     except Exception:  # noqa: BLE001 — /get 404s on a miss; fall through to search
@@ -69,10 +71,16 @@ def lrclib(topic: str, *, prior: Dossier, http: Http) -> Dossier:
         if by:
             track, artist = work, by
     if not (track and artist):
-        return Dossier(topic=topic, missing=("lrclib: no song + artist to time (say '<song> by <artist>')",))
+        return Dossier(
+            topic=topic,
+            missing=("lrclib: no song + artist to time (say '<song> by <artist>')",),
+        )
     rec = fetch_synced(http, track=track, artist=artist)
     if rec is None:
-        return Dossier(topic=topic, missing=(f"lrclib: no synced lyrics for {track!r} by {artist!r}",))
+        return Dossier(
+            topic=topic,
+            missing=(f"lrclib: no synced lyrics for {track!r} by {artist!r}",),
+        )
     lines = parse_lrc(rec["syncedLyrics"])
     url = f"https://lrclib.net/api/get/{rec.get('id')}"
     plain = (rec.get("plainLyrics") or "").strip()
@@ -82,5 +90,11 @@ def lrclib(topic: str, *, prior: Dossier, http: Http) -> Dossier:
         artist=None if prior.artist else rec.get("artistName"),
         lyrics=None if prior.lyrics else (plain or None),
         timed_lines=tuple(lines),
-        sources=(Source(url=url, title=f"LRCLIB: {rec.get('trackName')} — {rec.get('artistName')}", kind="lrclib"),),
+        sources=(
+            Source(
+                url=url,
+                title=f"LRCLIB: {rec.get('trackName')} — {rec.get('artistName')}",
+                kind="lrclib",
+            ),
+        ),
     )

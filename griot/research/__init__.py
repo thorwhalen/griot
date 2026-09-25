@@ -39,10 +39,14 @@ USER_AGENT = "griot/0.0 (+https://github.com/thorwhalen/griot)"
 class Http(Protocol):
     """The bytes-in seam: two verbs, both GET."""
 
-    def json(self, url: str, *, params: dict | None = None, headers: dict | None = None) -> Any:
+    def json(
+        self, url: str, *, params: dict | None = None, headers: dict | None = None
+    ) -> Any:
         """GET ``url`` and return the decoded JSON body."""
 
-    def text(self, url: str, *, params: dict | None = None, headers: dict | None = None) -> str:
+    def text(
+        self, url: str, *, params: dict | None = None, headers: dict | None = None
+    ) -> str:
         """GET ``url`` and return the body as text."""
 
 
@@ -56,7 +60,9 @@ class HttpxHttp:
     max_retries: int = 3
     _last: float = field(default=0.0, repr=False)
 
-    def _get(self, url: str, params: dict | None, headers: dict | None) -> httpx.Response:
+    def _get(
+        self, url: str, params: dict | None, headers: dict | None
+    ) -> httpx.Response:
         h = {"User-Agent": self.user_agent, **(headers or {})}
         last: Exception | None = None
         for attempt in range(self.max_retries + 1):
@@ -65,9 +71,17 @@ class HttpxHttp:
                 time.sleep(wait)
             self._last = time.monotonic()
             try:
-                r = httpx.get(url, params=params, headers=h, timeout=self.timeout, follow_redirects=True)
+                r = httpx.get(
+                    url,
+                    params=params,
+                    headers=h,
+                    timeout=self.timeout,
+                    follow_redirects=True,
+                )
                 if r.status_code == 429 or r.status_code >= 500:
-                    raise httpx.HTTPStatusError(f"transient {r.status_code}", request=r.request, response=r)
+                    raise httpx.HTTPStatusError(
+                        f"transient {r.status_code}", request=r.request, response=r
+                    )
                 r.raise_for_status()
                 return r
             except httpx.HTTPError as e:
@@ -77,10 +91,14 @@ class HttpxHttp:
                 time.sleep(min(2**attempt, 8))
         raise RuntimeError(f"GET {url} failed after retries: {last}") from last
 
-    def json(self, url: str, *, params: dict | None = None, headers: dict | None = None) -> Any:
+    def json(
+        self, url: str, *, params: dict | None = None, headers: dict | None = None
+    ) -> Any:
         return self._get(url, params, headers).json()
 
-    def text(self, url: str, *, params: dict | None = None, headers: dict | None = None) -> str:
+    def text(
+        self, url: str, *, params: dict | None = None, headers: dict | None = None
+    ) -> str:
         return self._get(url, params, headers).text
 
 
@@ -120,11 +138,16 @@ def research(
         try:
             fn = RESEARCHERS[name]
         except KeyError:
-            raise KeyError(f"unknown researcher {name!r}; known: {sorted(RESEARCHERS)}") from None
+            raise KeyError(
+                f"unknown researcher {name!r}; known: {sorted(RESEARCHERS)}"
+            ) from None
         try:
             part = fn(topic, prior=prior, http=http)
         except Exception as e:  # noqa: BLE001 — one blocked source must not sink the film
-            part = Dossier(topic=topic, missing=(f"{name}: failed ({type(e).__name__}: {str(e)[:160]})",))
+            part = Dossier(
+                topic=topic,
+                missing=(f"{name}: failed ({type(e).__name__}: {str(e)[:160]})",),
+            )
         parts.append(part)
         prior = merge(topic, parts)
     return prior

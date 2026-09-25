@@ -1,10 +1,10 @@
 """``python -m griot`` — the CLI over :mod:`griot.tools`, via ``cw``.
 
-    python -m griot writers
-    python -m griot research "The Sound of Silence" --writer song
-    python -m griot quote "The Sound of Silence" --writer song --minutes 3
-    python -m griot write "The Sound of Silence" --writer song --minutes 3 --out draft.json
-    python -m griot write "Trinity Church Manhattan" --fake      # no key, no spend
+python -m griot writers
+python -m griot research "The Sound of Silence" --writer song
+python -m griot quote "The Sound of Silence" --writer song --minutes 3
+python -m griot write "The Sound of Silence" --writer song --minutes 3 --out draft.json
+python -m griot write "Trinity Church Manhattan" --fake      # no key, no spend
 """
 
 from __future__ import annotations
@@ -27,7 +27,11 @@ def main(argv: list[str] | None = None) -> int:
     except ImportError:  # pragma: no cover - cli extra not installed
         print("install the CLI extra: pip install 'griot[cli]'", file=sys.stderr)
         return 2
-    return cw.dispatch([tools.writers, tools.research, tools.quote, tools.write], argv=argv, egress=_print_json)
+    return cw.dispatch(
+        [tools.writers, tools.research, tools.quote, tools.write],
+        argv=argv,
+        egress=_print_json,
+    )
 
 
 if __name__ == "__main__":  # pragma: no cover
