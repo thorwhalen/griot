@@ -53,4 +53,4 @@ jobs:
     # *variable* (`gh variable set NAME`) — declared names fall back to
     # repo variables automatically.
     secrets:
-      WADS_CI_SECRETS_JSON: ${{ toJSON(toJSON(secrets)) }}
+      PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
