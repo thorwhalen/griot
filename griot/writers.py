@@ -527,6 +527,7 @@ def draft_from_reply(
                 dropped.append(f"beat {i}: segment {ref!r} does not name a timed line")
                 continue
             placement = b.get("placement") or "before"
+            kept_at[i] = len(beats)
             beats.append(
                 braidio.SegmentBeat(
                     ref, rights="copyright-third-party", placement=placement

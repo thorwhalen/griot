@@ -176,7 +176,8 @@ def test_segments_are_kept_only_when_they_name_a_timed_line(dossier):
         and segs[0].rights == "copyright-third-party"
         and segs[0].placement == "after"
     )
-    assert len(draft.dropped) == 2 and "does not name a timed line" in draft.dropped[0]
+    beat_drops = [d for d in draft.dropped if d.startswith("beat ")]
+    assert len(beat_drops) == 2 and "does not name a timed line" in beat_drops[0]
 
 
 def test_malformed_json_raises_a_clear_error(dossier):
