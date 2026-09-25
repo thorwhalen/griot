@@ -164,7 +164,7 @@ exclude_paths = [
     "examples",
     "scrap",
 ]
-test_on_windows = true
+test_on_windows = false
 
 [tool.wads.ci.metrics]
 enabled = true

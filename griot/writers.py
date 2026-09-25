@@ -51,6 +51,7 @@ __all__ = [
     "plan_write",
     "quote",
     "register_writer",
+    "script_to_json",
     "write",
 ]
 
@@ -137,9 +138,7 @@ class Draft:
         return "\n\n".join(b.text for b in self.script.beats if isinstance(b, braidio.Narration))
 
     def to_dict(self) -> dict[str, Any]:
-        """JSON-able; the script in braidio's MCP shape."""
-        from braidio.mcp._helpers import to_json as _script_to_json
-
+        """JSON-able; the script in braidio's JSON shape (a ``type`` per beat)."""
         return {
             "writer": self.writer,
             "model": self.model,
@@ -148,7 +147,7 @@ class Draft:
             "ok": self.ok,
             "findings": [{"gate": f.gate, "message": f.message} for f in self.report.findings],
             "cost_usd_actual": self.cost_usd_actual,
-            "script": _script_to_json(self.script),
+            "script": script_to_json(self.script),
             "picture_hints": [h.__dict__ for h in self.picture_hints],
             "sources_used": list(self.sources_used),
             "dropped": list(self.dropped),
@@ -189,6 +188,17 @@ class Quote:
             "total_usd": self.total_usd,
             "has_unknown_costs": self.has_unknown_costs,
         }
+
+
+_BEAT_TYPES = {braidio.Narration: "narration", braidio.SegmentBeat: "segment", braidio.Dialogue: "dialogue", braidio.SceneBreak: "scene_break"}
+
+
+def script_to_json(script: braidio.Script) -> dict[str, Any]:
+    """braidio's MCP wire shape for a Script: the dataclass fields plus a ``type`` per beat."""
+    from dataclasses import asdict
+
+    beats = [{"type": _BEAT_TYPES[type(b)], **asdict(b)} for b in script.beats]
+    return {"title": script.title, "id_slug": script.id_slug, "beats": beats}
 
 
 # ---------------------------------------------------------------------------
