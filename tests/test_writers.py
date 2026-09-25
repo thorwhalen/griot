@@ -17,7 +17,9 @@ def test_three_writers_ship_and_are_data():
     assert {"general", "technical", "song"} <= set(griot.WRITERS)
     for w in griot.WRITERS.values():
         assert w.brief and w.title and w.blurb
-        assert 2 <= len(w.voices) <= 4, f"{w.name}: blend 2-4 voices, never impersonate one"
+        assert 2 <= len(w.voices) <= 4, (
+            f"{w.name}: blend 2-4 voices, never impersonate one"
+        )
         for v in w.voices:
             griot.voice_card(v)  # raises on an unknown voice
         assert w.format_id in braidio.formats.FORMATS
@@ -28,7 +30,11 @@ def test_a_writer_is_one_markdown_file_away():
     w = griot.writer_from_markdown(
         "---\nname: film\ntitle: The film critic\nvoices: david-sims, sean-fennessey\nwords_per_minute: 160\n---\nYou review films.\n"
     )
-    assert w.name == "film" and w.voices == ("david-sims", "sean-fennessey") and w.words_per_minute == 160
+    assert (
+        w.name == "film"
+        and w.voices == ("david-sims", "sean-fennessey")
+        and w.words_per_minute == 160
+    )
     assert w.brief == "You review films."
     griot.register_writer(w)
     assert griot.get_writer("film") is w
@@ -52,7 +58,9 @@ def test_the_prompt_carries_the_evidence_the_rules_and_the_voices(dossier):
 
 
 def test_no_timed_lines_means_narration_only_is_demanded(dossier):
-    d = griot.Dossier(topic=dossier.topic, subject=dossier.subject, summary=dossier.summary)
+    d = griot.Dossier(
+        topic=dossier.topic, subject=dossier.subject, summary=dossier.summary
+    )
     _, user = griot.build_prompt(griot.get_writer("general"), d, minutes=2)
     assert "do not emit segment beats" in user
 
@@ -90,11 +98,18 @@ def test_write_parses_into_a_braidio_script_with_a_second_voice_for_the_record(d
     draft = griot.write(w, dossier, minutes=3, complete=complete)
     assert draft.ok, draft.report.findings
     assert len(calls) == 1 and draft.revisions == 0
-    assert isinstance(draft.script, braidio.Script) and draft.script.id_slug == "two-silences"
+    assert (
+        isinstance(draft.script, braidio.Script)
+        and draft.script.id_slug == "two-silences"
+    )
     beats = draft.script.beats
     assert len(beats) == 5 and all(isinstance(b, braidio.Narration) for b in beats)
     record = beats[2]
-    assert record.voice == RECORD_VOICE_ID and record.style == "archive" and record.lead_gap_s >= 0.5
+    assert (
+        record.voice == RECORD_VOICE_ID
+        and record.style == "archive"
+        and record.lead_gap_s >= 0.5
+    )
     assert beats[0].voice is None  # the format's presenter
     assert len(draft.picture_hints) == 5 and draft.picture_hints[0].why
     assert draft.cost_usd_actual == pytest.approx(0.02)
@@ -109,17 +124,32 @@ def test_a_failing_draft_gets_one_revision_with_the_findings_quoted_back(dossier
 
     def complete(plan):
         prompts.append(plan.calls[0].arguments["prompt"])
-        return (good_reply(dossier, lyric_leak=True) if len(prompts) == 1 else good_reply(dossier)), 0.01
+        return (
+            good_reply(dossier, lyric_leak=True)
+            if len(prompts) == 1
+            else good_reply(dossier)
+        ), 0.01
 
     draft = griot.write(w, dossier, minutes=3, complete=complete)
     assert len(prompts) == 2 and draft.revisions == 1 and draft.ok
-    assert "REVISION" in prompts[1] and "lyric_leak" in prompts[1] and "Hello darkness" in prompts[1]
+    assert (
+        "REVISION" in prompts[1]
+        and "lyric_leak" in prompts[1]
+        and "Hello darkness" in prompts[1]
+    )
     assert draft.cost_usd_actual == pytest.approx(0.02)
 
 
-def test_a_draft_that_still_fails_is_returned_with_its_report_not_shipped_silently(dossier):
+def test_a_draft_that_still_fails_is_returned_with_its_report_not_shipped_silently(
+    dossier,
+):
     w = griot.get_writer("song")
-    draft = griot.write(w, dossier, minutes=3, complete=lambda p: (good_reply(dossier, lyric_leak=True), 0.0))
+    draft = griot.write(
+        w,
+        dossier,
+        minutes=3,
+        complete=lambda p: (good_reply(dossier, lyric_leak=True), 0.0),
+    )
     assert not draft.ok and draft.revisions == w.max_revisions
     assert any(f.gate == "lyric_leak" for f in draft.report.findings)
 
@@ -127,22 +157,53 @@ def test_a_draft_that_still_fails_is_returned_with_its_report_not_shipped_silent
 def test_segments_are_kept_only_when_they_name_a_timed_line(dossier):
     w = griot.get_writer("song")
     obj = json.loads(good_reply(dossier))
-    obj["beats"].insert(1, {"type": "segment", "reference": "Hello darkness, my old friend", "placement": "after"})
-    obj["beats"].insert(2, {"type": "segment", "reference": "a line the song does not have"})
+    obj["beats"].insert(
+        1,
+        {
+            "type": "segment",
+            "reference": "Hello darkness, my old friend",
+            "placement": "after",
+        },
+    )
+    obj["beats"].insert(
+        2, {"type": "segment", "reference": "a line the song does not have"}
+    )
     obj["beats"].append({"type": "song", "text": "?"})
     draft = griot.draft_from_reply(json.dumps(obj), w, dossier, minutes=3)
     segs = [b for b in draft.script.beats if isinstance(b, braidio.SegmentBeat)]
-    assert len(segs) == 1 and segs[0].rights == "copyright-third-party" and segs[0].placement == "after"
+    assert (
+        len(segs) == 1
+        and segs[0].rights == "copyright-third-party"
+        and segs[0].placement == "after"
+    )
     assert len(draft.dropped) == 2 and "does not name a timed line" in draft.dropped[0]
 
 
 def test_malformed_json_raises_a_clear_error(dossier):
     with pytest.raises(ValueError, match="not valid JSON"):
-        griot.draft_from_reply("```json\n{not json", griot.get_writer("general"), dossier, minutes=1)
+        griot.draft_from_reply(
+            "```json\n{not json", griot.get_writer("general"), dossier, minutes=1
+        )
     with pytest.raises(ValueError, match="'beats' list"):
-        griot.draft_from_reply('{"title": "x"}', griot.get_writer("general"), dossier, minutes=1)
+        griot.draft_from_reply(
+            '{"title": "x"}', griot.get_writer("general"), dossier, minutes=1
+        )
 
 
 def test_fenced_json_is_tolerated(dossier):
     reply = "```json\n" + good_reply(dossier) + "\n```"
-    assert griot.draft_from_reply(reply, griot.get_writer("song"), dossier, minutes=3).ok
+    assert griot.draft_from_reply(
+        reply, griot.get_writer("song"), dossier, minutes=3
+    ).ok
+
+
+def test_a_quote_before_research_is_a_ceiling_over_the_quote_after(dossier):
+    w = griot.get_writer("song")
+    before = griot.quote(
+        w,
+        griot.Dossier(topic=dossier.topic),
+        minutes=3,
+        extra_input_tokens=griot.DOSSIER_TOKEN_ALLOWANCE,
+    )
+    after = griot.quote(w, dossier, minutes=3)
+    assert before.llm_usd >= after.llm_usd and before.tts_usd == after.tts_usd

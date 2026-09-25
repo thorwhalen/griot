@@ -35,7 +35,9 @@ def test_skill_ships_in_wheel_built_from_sdist(tmp_path):
         names = tf.getnames()
         tf.extractall(tmp_path / "src", filter="data")
     assert any(n.endswith(SKILL) for n in names), names
-    assert not any("/.claude/" in n for n in names), "the symlink bridge leaked into the sdist"
+    assert not any("/.claude/" in n for n in names), (
+        "the symlink bridge leaked into the sdist"
+    )
     (src_dir,) = (tmp_path / "src").iterdir()
     wheel = _build("wheel", src_dir, tmp_path / "wheel")
     with zipfile.ZipFile(wheel) as zf:
@@ -46,5 +48,9 @@ def test_writers_and_style_library_ship_in_wheel(tmp_path):
     wheel = _build("wheel", ROOT, tmp_path / "wheel")
     with zipfile.ZipFile(wheel) as zf:
         names = zf.namelist()
-    for needed in ("griot/data/writers/song.md", "griot/data/style/anti-platitude-checklist.md", "griot/data/style/voices/john-mcwhorter.md"):
+    for needed in (
+        "griot/data/writers/song.md",
+        "griot/data/style/anti-platitude-checklist.md",
+        "griot/data/style/voices/john-mcwhorter.md",
+    ):
         assert needed in names, needed

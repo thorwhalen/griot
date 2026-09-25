@@ -41,6 +41,8 @@ from .style import checklist, voice_card, voice_guide_rules
 
 __all__ = [
     "DEFAULT_MODEL",
+    "DOSSIER_TOKEN_ALLOWANCE",
+    "DOSSIER_TOKEN_ALLOWANCE",
     "Draft",
     "PictureHint",
     "Quote",
@@ -385,8 +387,14 @@ def plan_write(
     angle: str = "",
     findings: GateReport | None = None,
     previous: dict[str, Any] | None = None,
+    extra_input_tokens: int = 0,
 ) -> Plan:
-    """The one-call falaw plan for a write (or a revision). Pure; spends nothing."""
+    """The one-call falaw plan for a write (or a revision). Pure; spends nothing.
+
+    ``extra_input_tokens`` widens the price for evidence that is not in
+    ``dossier`` yet — a caller quoting *before* research runs adds an allowance
+    so the quote stays a ceiling.
+    """
     system, user = build_prompt(
         writer,
         dossier,
@@ -402,8 +410,10 @@ def plan_write(
         model=writer.model,
         temperature=TEMPERATURE,
         output_kind="json",
+        # Upper bound: a token per byte, plus what the caller says is still to come.
         input_tokens=len(user.encode("utf-8"))
-        + len(system.encode("utf-8")),  # upper bound: a token per byte
+        + len(system.encode("utf-8"))
+        + max(0, int(extra_input_tokens)),
         max_output_tokens=max(OUTPUT_TOKENS_FLOOR, target * OUTPUT_TOKENS_PER_WORD),
         metadata={
             "griot": {
@@ -417,13 +427,27 @@ def plan_write(
     return Plan(calls=(call,))
 
 
+DOSSIER_TOKEN_ALLOWANCE = 16000
+"""What a full dossier (a lead, lyrics, timed lines, annotations) adds to the prompt, as an upper bound."""
+
+
 def quote(
-    writer: Writer | str, dossier: Dossier, *, minutes: float | None = None
+    writer: Writer | str,
+    dossier: Dossier,
+    *,
+    minutes: float | None = None,
+    extra_input_tokens: int = 0,
 ) -> Quote:
-    """Price the write (all its calls) and the voicing (from the word budget)."""
+    """Price the write (all its calls) and the voicing (from the word budget).
+
+    Pass ``dossier=Dossier(topic)`` and ``extra_input_tokens=DOSSIER_TOKEN_ALLOWANCE``
+    to quote before research has run: the figure is then a ceiling, not the plan.
+    """
     w = get_writer(writer)
     minutes = w.default_minutes if minutes is None else minutes
-    plan = plan_write(w, dossier, minutes=minutes)
+    plan = plan_write(
+        w, dossier, minutes=minutes, extra_input_tokens=extra_input_tokens
+    )
     calls = 1 + w.max_revisions
     per_call = plan.total_cost_usd if not plan.has_unknown_costs else None
     target = w.target_words(minutes)

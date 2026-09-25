@@ -29,6 +29,7 @@ from .research import RESEARCHERS, Http, HttpxHttp, register_researcher, researc
 from .style import checklist, list_voices, voice_card
 from .writers import (
     DEFAULT_MODEL,
+    DOSSIER_TOKEN_ALLOWANCE,
     WRITERS,
     Draft,
     PictureHint,
@@ -47,6 +48,7 @@ from .writers import (
 __all__ = [
     "Annotation",
     "DEFAULT_MODEL",
+    "DOSSIER_TOKEN_ALLOWANCE",
     "Dossier",
     "Draft",
     "Fact",

@@ -30,10 +30,14 @@ class FakeHttp:
                 return value(params) if callable(value) else value
         raise RuntimeError(f"fake http: no route for {url}")
 
-    def json(self, url: str, *, params: dict | None = None, headers: dict | None = None) -> Any:
+    def json(
+        self, url: str, *, params: dict | None = None, headers: dict | None = None
+    ) -> Any:
         return self._match(self.json_routes, url, params)
 
-    def text(self, url: str, *, params: dict | None = None, headers: dict | None = None) -> str:
+    def text(
+        self, url: str, *, params: dict | None = None, headers: dict | None = None
+    ) -> str:
         return self._match(self.text_routes, url, params)
 
 
@@ -45,35 +49,118 @@ def dossier() -> griot.Dossier:
         artist="Simon & Garfunkel",
         summary="The Sound of Silence is a song by Simon & Garfunkel, released in 1964.",
         facts=(
-            griot.Fact("The acoustic version flopped in 1964.", "https://en.wikipedia.org/wiki/The_Sound_of_Silence"),
-            griot.Fact("Tom Wilson overdubbed electric instruments in June 1965.", "https://en.wikipedia.org/wiki/The_Sound_of_Silence"),
+            griot.Fact(
+                "The acoustic version flopped in 1964.",
+                "https://en.wikipedia.org/wiki/The_Sound_of_Silence",
+            ),
+            griot.Fact(
+                "Tom Wilson overdubbed electric instruments in June 1965.",
+                "https://en.wikipedia.org/wiki/The_Sound_of_Silence",
+            ),
         ),
         lyrics="Hello darkness, my old friend\nI've come to talk with you again\nBecause a vision softly creeping\nLeft its seeds while I was sleeping",
-        annotations=(griot.Annotation("Hello darkness, my old friend", "Simon wrote it in the bathroom with the lights off.", votes=120),),
+        annotations=(
+            griot.Annotation(
+                "Hello darkness, my old friend",
+                "Simon wrote it in the bathroom with the lights off.",
+                votes=120,
+            ),
+        ),
         timed_lines=(
             griot.TimedLine(0, 0.0, 4.0, "Hello darkness, my old friend"),
             griot.TimedLine(1, 4.0, 8.0, "I've come to talk with you again"),
         ),
-        sources=(griot.Source("https://en.wikipedia.org/wiki/The_Sound_of_Silence", "The Sound of Silence", "wikipedia"),),
+        sources=(
+            griot.Source(
+                "https://en.wikipedia.org/wiki/The_Sound_of_Silence",
+                "The Sound of Silence",
+                "wikipedia",
+            ),
+        ),
     )
 
 
-def good_reply(dossier: griot.Dossier, *, words: int = 450, beats: int = 5, lyric_leak: bool = False) -> str:
+def good_reply(
+    dossier: griot.Dossier,
+    *,
+    words: int = 450,
+    beats: int = 5,
+    lyric_leak: bool = False,
+) -> str:
     """A reply that passes every gate (or leaks a lyric line when asked)."""
     import json
 
-    tags = ["[curious]", "[pause]", "[dryly]", "[quietly]", "[beat]", "[wryly]", "[slowly]"]
+    tags = [
+        "[curious]",
+        "[pause]",
+        "[dryly]",
+        "[quietly]",
+        "[beat]",
+        "[wryly]",
+        "[slowly]",
+    ]
     per = words // beats
     out = []
     for i in range(beats):
         toks: list[str] = []
         k = 0
         while len(toks) < per:
-            toks += [tags[(i + k) % len(tags)], "the", "take", "in", "June", "nineteen", "sixty-five", "changed", "what", "the", "song", "was", "for,", "and", "the", "two", "men", "who", "had", "made", "it", "did", "not", "know", "it", "yet."]
+            toks += [
+                tags[(i + k) % len(tags)],
+                "the",
+                "take",
+                "in",
+                "June",
+                "nineteen",
+                "sixty-five",
+                "changed",
+                "what",
+                "the",
+                "song",
+                "was",
+                "for,",
+                "and",
+                "the",
+                "two",
+                "men",
+                "who",
+                "had",
+                "made",
+                "it",
+                "did",
+                "not",
+                "know",
+                "it",
+                "yet.",
+            ]
             k += 1
         text = " ".join(toks[:per])
         if lyric_leak and i == 1:
             text += " Hello darkness, my old friend."
-        out.append({"type": "narration", "text": text, "role": "record" if i == 2 else "presenter", "lead_gap_s": 0.4 if i else 0})
-    hints = [{"beat_index": i, "query": f"Columbia Studio A 1965 session {i}", "subject": "Columbia Studio A", "why": "the overdub session", "source": "wikimedia"} for i in range(beats)]
-    return json.dumps({"title": "Two Silences", "id_slug": "two-silences", "beats": out, "picture_hints": hints, "sources_used": [dossier.sources[0].url]})
+        out.append(
+            {
+                "type": "narration",
+                "text": text,
+                "role": "record" if i == 2 else "presenter",
+                "lead_gap_s": 0.4 if i else 0,
+            }
+        )
+    hints = [
+        {
+            "beat_index": i,
+            "query": f"Columbia Studio A 1965 session {i}",
+            "subject": "Columbia Studio A",
+            "why": "the overdub session",
+            "source": "wikimedia",
+        }
+        for i in range(beats)
+    ]
+    return json.dumps(
+        {
+            "title": "Two Silences",
+            "id_slug": "two-silences",
+            "beats": out,
+            "picture_hints": hints,
+            "sources_used": [dossier.sources[0].url],
+        }
+    )

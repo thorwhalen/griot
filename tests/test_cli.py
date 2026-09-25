@@ -20,9 +20,15 @@ def test_writers_verb_lists_what_a_picker_needs():
 
 
 def test_write_fake_runs_the_whole_path_without_a_key(monkeypatch, tmp_path):
-    monkeypatch.setattr(importlib.import_module("griot.research"), "HttpxHttp", lambda: wiki_http("Trinity Church (Manhattan)"))
+    monkeypatch.setattr(
+        importlib.import_module("griot.research"),
+        "HttpxHttp",
+        lambda: wiki_http("Trinity Church (Manhattan)"),
+    )
     out = tmp_path / "draft.json"
-    payload = tools.write("Trinity Church Manhattan", writer="general", minutes=2, fake=True, out=str(out))
+    payload = tools.write(
+        "Trinity Church Manhattan", writer="general", minutes=2, fake=True, out=str(out)
+    )
     assert payload["ok"], payload["findings"]
     assert payload["dossier"]["subject"] == "Trinity Church (Manhattan)"
     assert len(payload["script"]["beats"]) == 5 and len(payload["picture_hints"]) == 5
@@ -30,9 +36,17 @@ def test_write_fake_runs_the_whole_path_without_a_key(monkeypatch, tmp_path):
 
 
 def test_quote_verb_prices_before_spending(monkeypatch):
-    monkeypatch.setattr(importlib.import_module("griot.research"), "HttpxHttp", lambda: wiki_http("Trinity Church (Manhattan)"))
+    monkeypatch.setattr(
+        importlib.import_module("griot.research"),
+        "HttpxHttp",
+        lambda: wiki_http("Trinity Church (Manhattan)"),
+    )
     q = tools.quote("Trinity Church Manhattan", writer="technical", minutes=3)
-    assert q["subject"] == "Trinity Church (Manhattan)" and q["total_usd"] > 0 and not q["has_unknown_costs"]
+    assert (
+        q["subject"] == "Trinity Church (Manhattan)"
+        and q["total_usd"] > 0
+        and not q["has_unknown_costs"]
+    )
     assert q["calls"] == 2
 
 
@@ -44,6 +58,8 @@ def test_cli_prints_json(capsys):
 
 def test_research_verb_uses_the_writers_researchers(monkeypatch):
     http = FakeHttp()
-    monkeypatch.setattr(importlib.import_module("griot.research"), "HttpxHttp", lambda: http)
+    monkeypatch.setattr(
+        importlib.import_module("griot.research"), "HttpxHttp", lambda: http
+    )
     d = tools.research("x", writer="song")
     assert [m.split(":")[0] for m in d["missing"]] == ["genius", "wikipedia", "lrclib"]
