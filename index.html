@@ -115,13 +115,17 @@
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kn">import</span><span class="w"> </span><span class="nn">griot</span>
 </span><span id="line-2">
-</span><span id="line-3"><span class="n">w</span> <span class="o">=</span> <span class="n">griot</span><span class="o">.</span><span class="n">get_writer</span><span class="p">(</span><span class="s2">"song"</span><span class="p">)</span>                                   <span class="c1"># general | technical | song</span>
-</span><span id="line-4"><span class="n">dossier</span> <span class="o">=</span> <span class="n">griot</span><span class="o">.</span><span class="n">research</span><span class="p">(</span><span class="s2">"The Sound of Silence by Simon &amp; Garfunkel"</span><span class="p">,</span> <span class="n">researchers</span><span class="o">=</span><span class="n">w</span><span class="o">.</span><span class="n">researchers</span><span class="p">)</span>
-</span><span id="line-5"><span class="n">q</span> <span class="o">=</span> <span class="n">griot</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">dossier</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>      <span class="c1"># priced before anything runs</span>
-</span><span id="line-6"><span class="n">draft</span> <span class="o">=</span> <span class="n">griot</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">dossier</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># one LLM call (+ one gated revision), cached</span>
-</span><span id="line-7"><span class="n">draft</span><span class="o">.</span><span class="n">script</span>                                 <span class="c1"># a braidio.Script — voice it with braidio.weave_project</span>
-</span><span id="line-8"><span class="n">draft</span><span class="o">.</span><span class="n">picture_hints</span>                          <span class="c1"># one per beat, with why</span>
-</span><span id="line-9"><span class="n">draft</span><span class="o">.</span><span class="n">ok</span><span class="p">,</span> <span class="n">draft</span><span class="o">.</span><span class="n">report</span>                       <span class="c1"># the gates' verdict and findings</span>
+</span><span id="line-3"><span class="n">w</span> <span class="o">=</span> <span class="n">griot</span><span class="o">.</span><span class="n">get_writer</span><span class="p">(</span><span class="s2">"song"</span><span class="p">)</span>  <span class="c1"># general | technical | song</span>
+</span><span id="line-4"><span class="n">dossier</span> <span class="o">=</span> <span class="n">griot</span><span class="o">.</span><span class="n">research</span><span class="p">(</span>
+</span><span id="line-5">    <span class="s2">"The Sound of Silence by Simon &amp; Garfunkel"</span><span class="p">,</span> <span class="n">researchers</span><span class="o">=</span><span class="n">w</span><span class="o">.</span><span class="n">researchers</span>
+</span><span id="line-6"><span class="p">)</span>
+</span><span id="line-7"><span class="n">q</span> <span class="o">=</span> <span class="n">griot</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">dossier</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># priced before anything runs</span>
+</span><span id="line-8"><span class="n">draft</span> <span class="o">=</span> <span class="n">griot</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+</span><span id="line-9">    <span class="n">w</span><span class="p">,</span> <span class="n">dossier</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">3</span>
+</span><span id="line-10"><span class="p">)</span>  <span class="c1"># one LLM call (+ one gated revision), cached</span>
+</span><span id="line-11"><span class="n">draft</span><span class="o">.</span><span class="n">script</span>  <span class="c1"># a braidio.Script — voice it with braidio.weave_project</span>
+</span><span id="line-12"><span class="n">draft</span><span class="o">.</span><span class="n">picture_hints</span>  <span class="c1"># one per beat, with why</span>
+</span><span id="line-13"><span class="n">draft</span><span class="o">.</span><span class="n">ok</span><span class="p">,</span> <span class="n">draft</span><span class="o">.</span><span class="n">report</span>  <span class="c1"># the gates' verdict and findings</span>
 </span></code></pre></div>
 </div>
 <p>Or from the shell: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">griot</span> <span class="pre">write</span> <span class="pre">"Trinity</span> <span class="pre">Church</span> <span class="pre">Manhattan"</span> <span class="pre">--writer</span> <span class="pre">general</span> <span class="pre">--out</span> <span class="pre">draft.json</span></code> (<code class="docutils literal notranslate"><span class="pre">--fake</span></code> runs the whole path with no key and no spend).</p>
@@ -167,7 +171,7 @@
 
 </section>
 </section>
-<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-09-25 09:56 UTC from <a href="https://github.com/thorwhalen/griot/commit/5dc4f6e456a009bc9ca61dcee6732edb32926a67">5dc4f6e</a> (main) · griot 0.0.1 · <a href="about-this-build.html">about this build</a></p>
+<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-09-25 10:07 UTC from <a href="https://github.com/thorwhalen/griot/commit/524d34f94d42e989d559d9e7a9db48bab3c0a268">524d34f</a> (main) · griot 0.0.2 · <a href="about-this-build.html">about this build</a></p>
 </div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
 <div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
 <ul>
@@ -188,7 +192,7 @@
 </div>
 </footer>
 </div>
-<script src="_static/documentation_options.js?v=d45e8c67"></script>
+<script src="_static/documentation_options.js?v=e3a6060d"></script>
 <script src="_static/doctools.js?v=fd6eb6e6"></script>
 <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
 <script src="_static/clipboard.min.js?v=a7894cd8"></script>

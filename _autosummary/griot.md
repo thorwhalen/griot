@@ -36,7 +36,7 @@ call is content-cached; `write(..., complete=fake)` replaces it for tests.
 | [`list_voices`](#griot.list_voices)()                                       | The voice names available to a writer (file stems under `voices/`).                                        |
 | [`merge`](#griot.merge)(topic, parts)                                 | Fold several researchers' dossiers into one.                                                               |
 | [`plan_write`](#griot.plan_write)(writer, dossier, \*, minutes[, ...])     | The one-call falaw plan for a write (or a revision).                                                       |
-| [`quote`](#griot.quote)(writer, dossier, \*[, minutes])               | Price the write (all its calls) and the voicing (from the word budget).                                    |
+| [`quote`](#griot.quote)(writer, dossier, \*[, minutes, ...])          | Price the write (all its calls) and the voicing (from the word budget).                                    |
 | [`register_researcher`](#griot.register_researcher)(name[, fn])                     | Register `fn` under `name`; usable as a decorator.                                                         |
 | [`register_writer`](#griot.register_writer)(writer)                             | Make `writer` available by name (replaces a same-named one).                                               |
 | [`research`](#griot.research)(topic, \*[, researchers, http])            | Run `researchers` in order on `topic` and merge what they found.                                           |
@@ -283,16 +283,23 @@ concatenated in that order, with duplicate sources (by URL) dropped.
 * **Return type:**
   [`Dossier`](griot.dossier.md#griot.dossier.Dossier)
 
-### griot.plan_write(writer, dossier, , minutes, angle='', findings=None, previous=None)
+### griot.plan_write(writer, dossier, , minutes, angle='', findings=None, previous=None, extra_input_tokens=0)
 
 The one-call falaw plan for a write (or a revision). Pure; spends nothing.
+
+`extra_input_tokens` widens the price for evidence that is not in
+`dossier` yet — a caller quoting *before* research runs adds an allowance
+so the quote stays a ceiling.
 
 * **Return type:**
   `Plan`
 
-### griot.quote(writer, dossier, , minutes=None)
+### griot.quote(writer, dossier, , minutes=None, extra_input_tokens=0)
 
 Price the write (all its calls) and the voicing (from the word budget).
+
+Pass `dossier=Dossier(topic)` and `extra_input_tokens=DOSSIER_TOKEN_ALLOWANCE`
+to quote before research has run: the figure is then a ceiling, not the plan.
 
 * **Return type:**
   [`Quote`](griot.writers.md#griot.writers.Quote)

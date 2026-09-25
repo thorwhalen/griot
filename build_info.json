@@ -1,32 +1,32 @@
 {
   "schema_version": 1,
-  "built_at": "2026-09-25T09:56:33Z",
+  "built_at": "2026-09-25T10:07:30Z",
   "package": {
     "name": "griot",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "display_name": "griot",
     "source": "pyproject.toml"
   },
   "git": {
     "available": true,
-    "commit": "5dc4f6e456a009bc9ca61dcee6732edb32926a67",
-    "short_commit": "5dc4f6e",
+    "commit": "524d34f94d42e989d559d9e7a9db48bab3c0a268",
+    "short_commit": "524d34f",
     "branch": "main",
     "tags": [],
     "dirty": false,
     "remote_url": "https://github.com/thorwhalen/griot",
-    "commit_url": "https://github.com/thorwhalen/griot/commit/5dc4f6e456a009bc9ca61dcee6732edb32926a67",
+    "commit_url": "https://github.com/thorwhalen/griot/commit/524d34f94d42e989d559d9e7a9db48bab3c0a268",
     "error": null
   },
   "ci": {
     "provider": "github",
     "repository": "thorwhalen/griot",
-    "sha": "5dc4f6e456a009bc9ca61dcee6732edb32926a67",
+    "sha": "524d34f94d42e989d559d9e7a9db48bab3c0a268",
     "sha_in_history": true,
     "ref": "refs/heads/main",
     "ref_name": "main",
-    "run_id": "36120983710",
-    "run_url": "https://github.com/thorwhalen/griot/actions/runs/36120983710",
+    "run_id": "36122065610",
+    "run_url": "https://github.com/thorwhalen/griot/actions/runs/36122065610",
     "server_url": "https://github.com"
   },
   "tools": {
@@ -56,18 +56,20 @@
   },
   "site": {
     "modules_documented": 6,
-    "objects_documented": 94
+    "objects_documented": 95
   },
   "pypi": {
     "checked": true,
-    "latest": null,
-    "relation": "unknown",
+    "latest": "0.0.3",
+    "relation": "behind",
     "error": null
   },
-  "reproduce": "git clone https://github.com/thorwhalen/griot && cd griot\ngit checkout 5dc4f6e456a009bc9ca61dcee6732edb32926a67\npip install \"epythet==0.2.12\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "reproduce": "git clone https://github.com/thorwhalen/griot && cd griot\ngit checkout 524d34f94d42e989d559d9e7a9db48bab3c0a268\npip install \"epythet==0.2.12\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
   "warnings": [],
   "alignment": {
-    "aligned": true,
-    "notes": []
+    "aligned": false,
+    "notes": [
+      "The documented version (0.0.2) is behind the latest release on PyPI (0.0.3): `pip install griot` gives newer code than these docs describe."
+    ]
   }
 }

@@ -23,9 +23,10 @@ LLM: any `(plan) -> (reply_text, cost_usd)` callable.
 
 ### Module Attributes
 
-| [`DEFAULT_MODEL`](#griot.writers.DEFAULT_MODEL)   | A fal any-llm id with a per-token rate in falaw's table; the seam is `Writer.model`.   |
-|------------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| [`WRITERS`](#griot.writers.WRITERS)         | Every writer by name — the three shipped ones plus anything registered.                |
+| [`DEFAULT_MODEL`](#griot.writers.DEFAULT_MODEL)           | A fal any-llm id with a per-token rate in falaw's table; the seam is `Writer.model`.                  |
+|--------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
+| [`WRITERS`](#griot.writers.WRITERS)                 | Every writer by name — the three shipped ones plus anything registered.                               |
+| [`DOSSIER_TOKEN_ALLOWANCE`](#griot.writers.DOSSIER_TOKEN_ALLOWANCE) | What a full dossier (a lead, lyrics, timed lines, annotations) adds to the prompt, as an upper bound. |
 
 ### Functions
 
@@ -33,7 +34,7 @@ LLM: any `(plan) -> (reply_text, cost_usd)` callable.
 |------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
 | [`get_writer`](#griot.writers.get_writer)(name)                                    | Resolve a name to a [`Writer`](#griot.writers.Writer); a Writer passes through. |
 | [`plan_write`](#griot.writers.plan_write)(writer, dossier, \*, minutes[, ...])     | The one-call falaw plan for a write (or a revision).                                                  |
-| [`quote`](#griot.writers.quote)(writer, dossier, \*[, minutes])               | Price the write (all its calls) and the voicing (from the word budget).                               |
+| [`quote`](#griot.writers.quote)(writer, dossier, \*[, minutes, ...])          | Price the write (all its calls) and the voicing (from the word budget).                               |
 | [`register_writer`](#griot.writers.register_writer)(writer)                             | Make `writer` available by name (replaces a same-named one).                                          |
 | [`script_to_json`](#griot.writers.script_to_json)(script)                              | braidio's MCP wire shape for a Script: the dataclass fields plus a `type` per beat.                   |
 | [`write`](#griot.writers.write)(writer, dossier, \*[, minutes, angle, ...])   | Research → this.                                                                                      |
@@ -49,6 +50,10 @@ LLM: any `(plan) -> (reply_text, cost_usd)` callable.
 ### griot.writers.DEFAULT_MODEL *= 'anthropic/claude-sonnet-4.5'*
 
 A fal any-llm id with a per-token rate in falaw’s table; the seam is `Writer.model`.
+
+### griot.writers.DOSSIER_TOKEN_ALLOWANCE *= 16000*
+
+What a full dossier (a lead, lyrics, timed lines, annotations) adds to the prompt, as an upper bound.
 
 ### *class* griot.writers.Draft(script, picture_hints, report, dossier, writer, model, minutes, revisions=0, cost_usd_actual=0.0, sources_used=(), dropped=(), raw=<factory>)
 
@@ -99,16 +104,23 @@ Resolve a name to a [`Writer`](#griot.writers.Writer); a Writer passes through.
 * **Return type:**
   [`Writer`](#griot.writers.Writer)
 
-### griot.writers.plan_write(writer, dossier, , minutes, angle='', findings=None, previous=None)
+### griot.writers.plan_write(writer, dossier, , minutes, angle='', findings=None, previous=None, extra_input_tokens=0)
 
 The one-call falaw plan for a write (or a revision). Pure; spends nothing.
+
+`extra_input_tokens` widens the price for evidence that is not in
+`dossier` yet — a caller quoting *before* research runs adds an allowance
+so the quote stays a ceiling.
 
 * **Return type:**
   `Plan`
 
-### griot.writers.quote(writer, dossier, , minutes=None)
+### griot.writers.quote(writer, dossier, , minutes=None, extra_input_tokens=0)
 
 Price the write (all its calls) and the voicing (from the word budget).
+
+Pass `dossier=Dossier(topic)` and `extra_input_tokens=DOSSIER_TOKEN_ALLOWANCE`
+to quote before research has run: the figure is then a ceiling, not the plan.
 
 * **Return type:**
   [`Quote`](#griot.writers.Quote)

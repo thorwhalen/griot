@@ -1,4 +1,4 @@
-> built 2026-09-25 09:56 UTC from 5dc4f6e (main) · griot 0.0.1. Details: build_info.json
+> built 2026-09-25 10:07 UTC from 524d34f (main) · griot 0.0.2. Details: build_info.json
 
 # index.html.md
 
@@ -17,13 +17,17 @@ pip install griot
 ```python
 import griot
 
-w = griot.get_writer("song")                                   # general | technical | song
-dossier = griot.research("The Sound of Silence by Simon & Garfunkel", researchers=w.researchers)
-q = griot.quote(w, dossier, minutes=3)      # priced before anything runs
-draft = griot.write(w, dossier, minutes=3)  # one LLM call (+ one gated revision), cached
-draft.script                                 # a braidio.Script — voice it with braidio.weave_project
-draft.picture_hints                          # one per beat, with why
-draft.ok, draft.report                       # the gates' verdict and findings
+w = griot.get_writer("song")  # general | technical | song
+dossier = griot.research(
+    "The Sound of Silence by Simon & Garfunkel", researchers=w.researchers
+)
+q = griot.quote(w, dossier, minutes=3)  # priced before anything runs
+draft = griot.write(
+    w, dossier, minutes=3
+)  # one LLM call (+ one gated revision), cached
+draft.script  # a braidio.Script — voice it with braidio.weave_project
+draft.picture_hints  # one per beat, with why
+draft.ok, draft.report  # the gates' verdict and findings
 ```
 
 Or from the shell: `python -m griot write "Trinity Church Manhattan" --writer general --out draft.json` (`--fake` runs the whole path with no key and no spend).
@@ -293,7 +297,7 @@ call is content-cached; `write(..., complete=fake)` replaces it for tests.
 | [`list_voices`](_autosummary/griot.html.md#griot.list_voices)()                                       | The voice names available to a writer (file stems under `voices/`).                                        |
 | [`merge`](_autosummary/griot.html.md#griot.merge)(topic, parts)                                 | Fold several researchers' dossiers into one.                                                               |
 | [`plan_write`](_autosummary/griot.html.md#griot.plan_write)(writer, dossier, \*, minutes[, ...])     | The one-call falaw plan for a write (or a revision).                                                       |
-| [`quote`](_autosummary/griot.html.md#griot.quote)(writer, dossier, \*[, minutes])               | Price the write (all its calls) and the voicing (from the word budget).                                    |
+| [`quote`](_autosummary/griot.html.md#griot.quote)(writer, dossier, \*[, minutes, ...])          | Price the write (all its calls) and the voicing (from the word budget).                                    |
 | [`register_researcher`](_autosummary/griot.html.md#griot.register_researcher)(name[, fn])                     | Register `fn` under `name`; usable as a decorator.                                                         |
 | [`register_writer`](_autosummary/griot.html.md#griot.register_writer)(writer)                             | Make `writer` available by name (replaces a same-named one).                                               |
 | [`research`](_autosummary/griot.html.md#griot.research)(topic, \*[, researchers, http])            | Run `researchers` in order on `topic` and merge what they found.                                           |
@@ -540,16 +544,23 @@ concatenated in that order, with duplicate sources (by URL) dropped.
 * **Return type:**
   [`Dossier`](_autosummary/griot.dossier.html.md#griot.dossier.Dossier)
 
-### griot.plan_write(writer, dossier, , minutes, angle='', findings=None, previous=None)
+### griot.plan_write(writer, dossier, , minutes, angle='', findings=None, previous=None, extra_input_tokens=0)
 
 The one-call falaw plan for a write (or a revision). Pure; spends nothing.
+
+`extra_input_tokens` widens the price for evidence that is not in
+`dossier` yet — a caller quoting *before* research runs adds an allowance
+so the quote stays a ceiling.
 
 * **Return type:**
   `Plan`
 
-### griot.quote(writer, dossier, , minutes=None)
+### griot.quote(writer, dossier, , minutes=None, extra_input_tokens=0)
 
 Price the write (all its calls) and the voicing (from the word budget).
+
+Pass `dossier=Dossier(topic)` and `extra_input_tokens=DOSSIER_TOKEN_ALLOWANCE`
+to quote before research has run: the figure is then a ceiling, not the plan.
 
 * **Return type:**
   [`Quote`](_autosummary/griot.writers.html.md#griot.writers.Quote)
@@ -739,9 +750,10 @@ LLM: any `(plan) -> (reply_text, cost_usd)` callable.
 
 ### Module Attributes
 
-| [`DEFAULT_MODEL`](_autosummary/griot.writers.html.md#griot.writers.DEFAULT_MODEL)   | A fal any-llm id with a per-token rate in falaw's table; the seam is `Writer.model`.   |
-|------------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| [`WRITERS`](_autosummary/griot.writers.html.md#griot.writers.WRITERS)         | Every writer by name — the three shipped ones plus anything registered.                |
+| [`DEFAULT_MODEL`](_autosummary/griot.writers.html.md#griot.writers.DEFAULT_MODEL)           | A fal any-llm id with a per-token rate in falaw's table; the seam is `Writer.model`.                  |
+|--------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
+| [`WRITERS`](_autosummary/griot.writers.html.md#griot.writers.WRITERS)                 | Every writer by name — the three shipped ones plus anything registered.                               |
+| [`DOSSIER_TOKEN_ALLOWANCE`](_autosummary/griot.writers.html.md#griot.writers.DOSSIER_TOKEN_ALLOWANCE) | What a full dossier (a lead, lyrics, timed lines, annotations) adds to the prompt, as an upper bound. |
 
 ### Functions
 
@@ -749,7 +761,7 @@ LLM: any `(plan) -> (reply_text, cost_usd)` callable.
 |------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
 | [`get_writer`](_autosummary/griot.writers.html.md#griot.writers.get_writer)(name)                                    | Resolve a name to a [`Writer`](_autosummary/griot.writers.html.md#griot.writers.Writer); a Writer passes through. |
 | [`plan_write`](_autosummary/griot.writers.html.md#griot.writers.plan_write)(writer, dossier, \*, minutes[, ...])     | The one-call falaw plan for a write (or a revision).                                                  |
-| [`quote`](_autosummary/griot.writers.html.md#griot.writers.quote)(writer, dossier, \*[, minutes])               | Price the write (all its calls) and the voicing (from the word budget).                               |
+| [`quote`](_autosummary/griot.writers.html.md#griot.writers.quote)(writer, dossier, \*[, minutes, ...])          | Price the write (all its calls) and the voicing (from the word budget).                               |
 | [`register_writer`](_autosummary/griot.writers.html.md#griot.writers.register_writer)(writer)                             | Make `writer` available by name (replaces a same-named one).                                          |
 | [`script_to_json`](_autosummary/griot.writers.html.md#griot.writers.script_to_json)(script)                              | braidio's MCP wire shape for a Script: the dataclass fields plus a `type` per beat.                   |
 | [`write`](_autosummary/griot.writers.html.md#griot.writers.write)(writer, dossier, \*[, minutes, angle, ...])   | Research → this.                                                                                      |
@@ -765,6 +777,10 @@ LLM: any `(plan) -> (reply_text, cost_usd)` callable.
 ### griot.writers.DEFAULT_MODEL *= 'anthropic/claude-sonnet-4.5'*
 
 A fal any-llm id with a per-token rate in falaw’s table; the seam is `Writer.model`.
+
+### griot.writers.DOSSIER_TOKEN_ALLOWANCE *= 16000*
+
+What a full dossier (a lead, lyrics, timed lines, annotations) adds to the prompt, as an upper bound.
 
 ### *class* griot.writers.Draft(script, picture_hints, report, dossier, writer, model, minutes, revisions=0, cost_usd_actual=0.0, sources_used=(), dropped=(), raw=<factory>)
 
@@ -815,16 +831,23 @@ Resolve a name to a [`Writer`](_autosummary/griot.writers.html.md#griot.writers.
 * **Return type:**
   [`Writer`](_autosummary/griot.writers.html.md#griot.writers.Writer)
 
-### griot.writers.plan_write(writer, dossier, , minutes, angle='', findings=None, previous=None)
+### griot.writers.plan_write(writer, dossier, , minutes, angle='', findings=None, previous=None, extra_input_tokens=0)
 
 The one-call falaw plan for a write (or a revision). Pure; spends nothing.
+
+`extra_input_tokens` widens the price for evidence that is not in
+`dossier` yet — a caller quoting *before* research runs adds an allowance
+so the quote stays a ceiling.
 
 * **Return type:**
   `Plan`
 
-### griot.writers.quote(writer, dossier, , minutes=None)
+### griot.writers.quote(writer, dossier, , minutes=None, extra_input_tokens=0)
 
 Price the write (all its calls) and the voicing (from the word budget).
+
+Pass `dossier=Dossier(topic)` and `extra_input_tokens=DOSSIER_TOKEN_ALLOWANCE`
+to quote before research has run: the figure is then a ceiling, not the plan.
 
 * **Return type:**
   [`Quote`](_autosummary/griot.writers.html.md#griot.writers.Quote)
@@ -857,16 +880,18 @@ Research → this. Write, gate, revise at most `max_revisions` times, return the
 
 # About this build
 
-This documentation was built on **2026-09-25 09:56 UTC** from commit <a href="https://github.com/thorwhalen/griot/commit/5dc4f6e456a009bc9ca61dcee6732edb32926a67"><code>5dc4f6e</code></a> on branch <code>main</code>, for **griot 0.0.1** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-09-25 10:07 UTC** from commit <a href="https://github.com/thorwhalen/griot/commit/524d34f94d42e989d559d9e7a9db48bab3c0a268"><code>524d34f</code></a> on branch <code>main</code>, for **griot 0.0.2** (from <code>pyproject.toml</code>).
 
-#### NOTE
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+#### WARNING
+The documentation and the package may be misaligned:
+
+- The documented version (0.0.2) is behind the latest release on PyPI (0.0.3): `pip install griot` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/griot/commit/5dc4f6e456a009bc9ca61dcee6732edb32926a67"><code>5dc4f6e456a009bc9ca61dcee6732edb32926a67</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/griot/commit/524d34f94d42e989d559d9e7a9db48bab3c0a268"><code>524d34f94d42e989d559d9e7a9db48bab3c0a268</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -877,9 +902,9 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/griot</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/griot/actions/runs/36120983710">36120983710</a>     |
+| Run          | <a href="https://github.com/thorwhalen/griot/actions/runs/36122065610">36122065610</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>5dc4f6e456a009bc9ca61dcee6732edb32926a67</code> (in the history of the built commit) |
+| Event commit | <code>524d34f94d42e989d559d9e7a9db48bab3c0a268</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -904,13 +929,13 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-<code>griot</code> is not on PyPI.
+Latest release: <a href="https://pypi.org/project/griot/0.0.3/">0.0.3</a>, newer than the documented version (0.0.2).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/griot && cd griot
-git checkout 5dc4f6e456a009bc9ca61dcee6732edb32926a67
+git checkout 524d34f94d42e989d559d9e7a9db48bab3c0a268
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

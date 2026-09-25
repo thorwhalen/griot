@@ -145,6 +145,9 @@ LLM: any <code class="docutils literal notranslate"><span class="pre">(plan)</sp
 <tr class="row-even"><td><p><a class="reference internal" href="#griot.writers.WRITERS" title="griot.writers.WRITERS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WRITERS</span></code></a></p></td>
 <td><p>Every writer by name — the three shipped ones plus anything registered.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#griot.writers.DOSSIER_TOKEN_ALLOWANCE" title="griot.writers.DOSSIER_TOKEN_ALLOWANCE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DOSSIER_TOKEN_ALLOWANCE</span></code></a></p></td>
+<td><p>What a full dossier (a lead, lyrics, timed lines, annotations) adds to the prompt, as an upper bound.</p></td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Functions</p>
@@ -159,7 +162,7 @@ LLM: any <code class="docutils literal notranslate"><span class="pre">(plan)</sp
 <tr class="row-odd"><td><p><a class="reference internal" href="#griot.writers.plan_write" title="griot.writers.plan_write"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plan_write</span></code></a>(writer, dossier, *, minutes[, ...])</p></td>
 <td><p>The one-call falaw plan for a write (or a revision).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#griot.writers.quote" title="griot.writers.quote"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quote</span></code></a>(writer, dossier, *[, minutes])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#griot.writers.quote" title="griot.writers.quote"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quote</span></code></a>(writer, dossier, *[, minutes, ...])</p></td>
 <td><p>Price the write (all its calls) and the voicing (from the word budget).</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#griot.writers.register_writer" title="griot.writers.register_writer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_writer</span></code></a>(writer)</p></td>
@@ -194,6 +197,11 @@ LLM: any <code class="docutils literal notranslate"><span class="pre">(plan)</sp
 <dt class="sig sig-object py" id="griot.writers.DEFAULT_MODEL">
 <span class="sig-prename descclassname"><span class="pre">griot.writers.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_MODEL</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'anthropic/claude-sonnet-4.5'</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#griot.writers.DEFAULT_MODEL" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#griot.writers.DEFAULT_MODEL'">¶</a></dt>
 <dd><p>A fal any-llm id with a per-token rate in falaw’s table; the seam is <code class="docutils literal notranslate"><span class="pre">Writer.model</span></code>.</p>
+</dd></dl>
+<dl class="py data">
+<dt class="sig sig-object py" id="griot.writers.DOSSIER_TOKEN_ALLOWANCE">
+<span class="sig-prename descclassname"><span class="pre">griot.writers.</span></span><span class="sig-name descname"><span class="pre">DOSSIER_TOKEN_ALLOWANCE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16000</span></span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#griot.writers.DOSSIER_TOKEN_ALLOWANCE" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#griot.writers.DOSSIER_TOKEN_ALLOWANCE'">¶</a></dt>
+<dd><p>What a full dossier (a lead, lyrics, timed lines, annotations) adds to the prompt, as an upper bound.</p>
 </dd></dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="griot.writers.Draft">
@@ -264,8 +272,11 @@ LLM: any <code class="docutils literal notranslate"><span class="pre">(plan)</sp
 </dd></dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="griot.writers.plan_write">
-<span class="sig-prename descclassname"><span class="pre">griot.writers.</span></span><span class="sig-name descname"><span class="pre">plan_write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dossier</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">minutes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">findings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/griot/writers.html#plan_write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#griot.writers.plan_write" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#griot.writers.plan_write'">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">griot.writers.</span></span><span class="sig-name descname"><span class="pre">plan_write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dossier</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">minutes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">findings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_input_tokens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/griot/writers.html#plan_write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#griot.writers.plan_write" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#griot.writers.plan_write'">¶</a></dt>
 <dd><p>The one-call falaw plan for a write (or a revision). Pure; spends nothing.</p>
+<p><code class="docutils literal notranslate"><span class="pre">extra_input_tokens</span></code> widens the price for evidence that is not in
+<code class="docutils literal notranslate"><span class="pre">dossier</span></code> yet — a caller quoting <em>before</em> research runs adds an allowance
+so the quote stays a ceiling.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Plan</span></code></span></p>
@@ -274,8 +285,10 @@ LLM: any <code class="docutils literal notranslate"><span class="pre">(plan)</sp
 </dd></dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="griot.writers.quote">
-<span class="sig-prename descclassname"><span class="pre">griot.writers.</span></span><span class="sig-name descname"><span class="pre">quote</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dossier</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">minutes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/griot/writers.html#quote"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#griot.writers.quote" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#griot.writers.quote'">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">griot.writers.</span></span><span class="sig-name descname"><span class="pre">quote</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dossier</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">minutes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_input_tokens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/griot/writers.html#quote"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#griot.writers.quote" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#griot.writers.quote'">¶</a></dt>
 <dd><p>Price the write (all its calls) and the voicing (from the word budget).</p>
+<p>Pass <code class="docutils literal notranslate"><span class="pre">dossier=Dossier(topic)</span></code> and <code class="docutils literal notranslate"><span class="pre">extra_input_tokens=DOSSIER_TOKEN_ALLOWANCE</span></code>
+to quote before research has run: the figure is then a ceiling, not the plan.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#griot.writers.Quote" title="griot.writers.Quote"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quote</span></code></a></span></p>
@@ -317,6 +330,7 @@ LLM: any <code class="docutils literal notranslate"><span class="pre">(plan)</sp
 <div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
 <ul>
 <li><a :data-current="activeSection === '#griot.writers.DEFAULT_MODEL'" class="reference internal" href="#griot.writers.DEFAULT_MODEL"><code class="docutils literal notranslate"><span class="pre">DEFAULT_MODEL</span></code></a></li>
+<li><a :data-current="activeSection === '#griot.writers.DOSSIER_TOKEN_ALLOWANCE'" class="reference internal" href="#griot.writers.DOSSIER_TOKEN_ALLOWANCE"><code class="docutils literal notranslate"><span class="pre">DOSSIER_TOKEN_ALLOWANCE</span></code></a></li>
 <li><a :data-current="activeSection === '#griot.writers.Draft'" class="reference internal" href="#griot.writers.Draft"><code class="docutils literal notranslate"><span class="pre">Draft</span></code></a><ul>
 <li><a :data-current="activeSection === '#griot.writers.Draft.to_dict'" class="reference internal" href="#griot.writers.Draft.to_dict"><code class="docutils literal notranslate"><span class="pre">Draft.to_dict()</span></code></a></li>
 </ul>
@@ -345,7 +359,7 @@ LLM: any <code class="docutils literal notranslate"><span class="pre">(plan)</sp
 </div>
 </footer>
 </div>
-<script src="../_static/documentation_options.js?v=d45e8c67"></script>
+<script src="../_static/documentation_options.js?v=e3a6060d"></script>
 <script src="../_static/doctools.js?v=fd6eb6e6"></script>
 <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
 <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

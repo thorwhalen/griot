@@ -10,6 +10,7 @@ griot.writers
    
       DEFAULT_MODEL
       WRITERS
+      DOSSIER_TOKEN_ALLOWANCE
    
    .. rubric:: Functions
 

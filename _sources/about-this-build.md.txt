@@ -5,17 +5,19 @@ orphan: true
 
 # About this build
 
-This documentation was built on **2026-09-25 09:56 UTC** from commit <a href="https://github.com/thorwhalen/griot/commit/5dc4f6e456a009bc9ca61dcee6732edb32926a67"><code>5dc4f6e</code></a> on branch <code>main</code>, for **griot 0.0.1** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-09-25 10:07 UTC** from commit <a href="https://github.com/thorwhalen/griot/commit/524d34f94d42e989d559d9e7a9db48bab3c0a268"><code>524d34f</code></a> on branch <code>main</code>, for **griot 0.0.2** (from <code>pyproject.toml</code>).
 
-:::{note}
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+:::{warning}
+The documentation and the package may be misaligned:
+
+- The documented version (0.0.2) is behind the latest release on PyPI (0.0.3): `pip install griot` gives newer code than these docs describe.
 :::
 
 ## Source
 
 | | |
 |---|---|
-| Commit | <a href="https://github.com/thorwhalen/griot/commit/5dc4f6e456a009bc9ca61dcee6732edb32926a67"><code>5dc4f6e456a009bc9ca61dcee6732edb32926a67</code></a> |
+| Commit | <a href="https://github.com/thorwhalen/griot/commit/524d34f94d42e989d559d9e7a9db48bab3c0a268"><code>524d34f94d42e989d559d9e7a9db48bab3c0a268</code></a> |
 | Branch | <code>main</code> |
 | Tags at this commit | none |
 | Working tree | clean |
@@ -26,9 +28,9 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 | | |
 |---|---|
 | Repository | <code>thorwhalen/griot</code> |
-| Run | <a href="https://github.com/thorwhalen/griot/actions/runs/36120983710">36120983710</a> |
+| Run | <a href="https://github.com/thorwhalen/griot/actions/runs/36122065610">36122065610</a> |
 | Ref | <code>refs/heads/main</code> |
-| Event commit | <code>5dc4f6e456a009bc9ca61dcee6732edb32926a67</code> (in the history of the built commit) |
+| Event commit | <code>524d34f94d42e989d559d9e7a9db48bab3c0a268</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -53,13 +55,13 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-<code>griot</code> is not on PyPI.
+Latest release: <a href="https://pypi.org/project/griot/0.0.3/">0.0.3</a>, newer than the documented version (0.0.2).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/griot && cd griot
-git checkout 5dc4f6e456a009bc9ca61dcee6732edb32926a67
+git checkout 524d34f94d42e989d559d9e7a9db48bab3c0a268
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
