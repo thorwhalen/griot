@@ -495,6 +495,9 @@ def draft_from_reply(
 
     beats: list[Any] = []
     dropped: list[str] = []
+    # raw index (the model's `beats` array) -> kept index (the Script's beats).
+    # A dropped beat must not shift every later picture onto the wrong words.
+    kept_at: dict[int, int] = {}
     timed_texts = {t.text.strip().lower() for t in dossier.timed_lines}
     for i, b in enumerate(obj["beats"]):
         kind = (b or {}).get("type")
@@ -505,6 +508,7 @@ def draft_from_reply(
                 continue
             role = b.get("role") or "presenter"
             gap = float(b.get("lead_gap_s") or 0.0)
+            kept_at[i] = len(beats)
             if role == "record":
                 beats.append(
                     braidio.Narration(
@@ -534,9 +538,13 @@ def draft_from_reply(
     hints: list[PictureHint] = []
     for h in obj.get("picture_hints") or []:
         try:
+            raw_index = int(h["beat_index"])
+            if raw_index not in kept_at:
+                dropped.append(f"picture hint for beat {raw_index} names no kept beat")
+                continue
             hints.append(
                 PictureHint(
-                    beat_index=int(h["beat_index"]),
+                    beat_index=kept_at[raw_index],
                     query=str(h["query"]).strip(),
                     subject=str(h.get("subject") or "").strip(),
                     why=str(h.get("why") or "").strip(),

@@ -207,3 +207,23 @@ def test_a_quote_before_research_is_a_ceiling_over_the_quote_after(dossier):
     )
     after = griot.quote(w, dossier, minutes=3)
     assert before.llm_usd >= after.llm_usd and before.tts_usd == after.tts_usd
+
+
+def test_picture_hints_follow_their_beats_when_an_earlier_beat_is_dropped(dossier):
+    """A dropped beat must not shift every later picture onto the wrong words."""
+    w = griot.get_writer("song")
+    obj = json.loads(good_reply(dossier))
+    obj["beats"].insert(
+        1, {"type": "segment", "reference": "not a timed line"}
+    )  # dropped
+    obj["picture_hints"] = [
+        {"beat_index": i, "query": f"q{i}", "subject": f"s{i}", "why": "w"}
+        for i in range(len(obj["beats"]))
+    ]
+    draft = griot.draft_from_reply(json.dumps(obj), w, dossier, minutes=3)
+    assert len(draft.script.beats) == 5
+    # raw beat 2 (the first after the dropped one) is kept beat 1, and its hint says so
+    by_index = {h.beat_index: h for h in draft.picture_hints}
+    assert by_index[1].query == "q2" and by_index[0].query == "q0"
+    assert all(0 <= h.beat_index < 5 for h in draft.picture_hints)
+    assert any("names no kept beat" in d for d in draft.dropped)
