@@ -29,7 +29,7 @@ authors = [
 # research fetchers (Genius pages are scraped for lyrics).
 dependencies = [
     "braidio",
-    "falaw",
+    "falaw[fal]",
     "httpx",
     "beautifulsoup4",
 ]
