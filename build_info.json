@@ -1,32 +1,32 @@
 {
   "schema_version": 1,
-  "built_at": "2026-09-25T11:07:53Z",
+  "built_at": "2026-10-03T07:56:31Z",
   "package": {
     "name": "griot",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "display_name": "griot",
     "source": "pyproject.toml"
   },
   "git": {
     "available": true,
-    "commit": "3799dbeae804094e89bf9f421e4d8c6586042eac",
-    "short_commit": "3799dbe",
+    "commit": "dda026e0dedd2bf1b1a8af9be7d0eabbe360f855",
+    "short_commit": "dda026e",
     "branch": "main",
     "tags": [],
     "dirty": false,
     "remote_url": "https://github.com/thorwhalen/griot",
-    "commit_url": "https://github.com/thorwhalen/griot/commit/3799dbeae804094e89bf9f421e4d8c6586042eac",
+    "commit_url": "https://github.com/thorwhalen/griot/commit/dda026e0dedd2bf1b1a8af9be7d0eabbe360f855",
     "error": null
   },
   "ci": {
     "provider": "github",
     "repository": "thorwhalen/griot",
-    "sha": "3799dbeae804094e89bf9f421e4d8c6586042eac",
+    "sha": "dda026e0dedd2bf1b1a8af9be7d0eabbe360f855",
     "sha_in_history": true,
     "ref": "refs/heads/main",
     "ref_name": "main",
-    "run_id": "36127571778",
-    "run_url": "https://github.com/thorwhalen/griot/actions/runs/36127571778",
+    "run_id": "37107927621",
+    "run_url": "https://github.com/thorwhalen/griot/actions/runs/37107927621",
     "server_url": "https://github.com"
   },
   "tools": {
@@ -60,14 +60,16 @@
   },
   "pypi": {
     "checked": true,
-    "latest": "0.0.3",
-    "relation": "same",
+    "latest": "0.0.5",
+    "relation": "behind",
     "error": null
   },
-  "reproduce": "git clone https://github.com/thorwhalen/griot && cd griot\ngit checkout 3799dbeae804094e89bf9f421e4d8c6586042eac\npip install \"epythet==0.2.12\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "reproduce": "git clone https://github.com/thorwhalen/griot && cd griot\ngit checkout dda026e0dedd2bf1b1a8af9be7d0eabbe360f855\npip install \"epythet==0.2.12\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
   "warnings": [],
   "alignment": {
-    "aligned": true,
-    "notes": []
+    "aligned": false,
+    "notes": [
+      "The documented version (0.0.4) is behind the latest release on PyPI (0.0.5): `pip install griot` gives newer code than these docs describe."
+    ]
   }
 }
