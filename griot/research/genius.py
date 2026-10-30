@@ -4,7 +4,8 @@ Genius serves the same JSON envelope on its public web API
 (``https://genius.com/api``) as on the official one, without a token, and the
 lyrics come from the rendered song page. This is the tokenless path that made
 three productions (Hamilton, Actually Romantic, Two Silences), graduated from
-``hamilton_genius`` (Hamilton#60).
+``hamilton_genius`` (Hamilton#60). The page scraping (:func:`extract_lyrics`) lives in the lean
+``songsrc`` package, shared with Hamilton; this module is the :class:`Dossier` adapter over it.
 
 Two rules a real episode paid for:
 
@@ -19,10 +20,9 @@ Two rules a real episode paid for:
 from __future__ import annotations
 
 import os
-import re
 from typing import Any
 
-from bs4 import BeautifulSoup, NavigableString, Tag
+from songsrc import extract_lyrics
 
 from ..dossier import Annotation, Dossier, Source
 from . import Http, register_researcher
@@ -42,13 +42,6 @@ BROWSER_UA = (
 """The public endpoints and the song pages want a browser-like UA."""
 
 MAX_ANNOTATIONS = 24
-_JUNK_SELECTORS = (
-    '[class*="LyricsHeader"]',
-    '[class*="RightSidebar"]',
-    '[class*="Ad__"]',
-    "[data-exclude-from-selection]",
-)
-
 
 def _api(token: str | None) -> tuple[str, dict[str, str]]:
     """``(base_url, headers)`` — the official API when a token is set, else the public one."""
@@ -107,45 +100,6 @@ def referents(
         if len(refs) < per_page:
             break
     return out
-
-
-def extract_lyrics(html: str) -> str:
-    """Plain-text lyrics from a Genius song page; ``""`` when there is no container."""
-    soup = BeautifulSoup(html, "html.parser")
-    containers = soup.select('div[data-lyrics-container="true"]')
-    if not containers:
-        legacy = soup.select_one(".lyrics")
-        containers = [legacy] if legacy else []
-    text = "\n".join(
-        t for t in (_container_text(c) for c in containers if c is not None) if t
-    )
-    text = text.replace("\r\n", "\n").replace("\xa0", " ")
-    text = "\n".join(line.rstrip() for line in text.split("\n"))
-    return re.sub(r"\n{3,}", "\n\n", text).strip()
-
-
-def _container_text(container: Tag) -> str:
-    for sel in _JUNK_SELECTORS:
-        for junk in container.select(sel):
-            junk.decompose()
-    out: list[str] = []
-
-    def walk(node: Any) -> None:
-        if isinstance(node, NavigableString):
-            out.append(str(node))
-            return
-        if not isinstance(node, Tag):
-            return
-        if node.name == "br":
-            out.append("\n")
-            return
-        for child in node.children:
-            walk(child)
-        if node.name in {"div", "p"}:
-            out.append("\n")
-
-    walk(container)
-    return "".join(out)
 
 
 def _annotations(refs: list[dict[str, Any]]) -> list[Annotation]:

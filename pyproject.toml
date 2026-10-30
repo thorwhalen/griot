@@ -26,12 +26,13 @@ authors = [
 # Local federation packages carry no version pins (they co-evolve).
 # braidio: the Script the writers produce, the formats' scripting guidance, the
 # two audits. falaw: the one priced, cached LLM path. httpx + bs4: the tokenless
-# research fetchers (Genius pages are scraped for lyrics).
+# research fetchers. songsrc: the lean Genius/LRCLIB acquisition shared with Hamilton.
 dependencies = [
     "braidio",
     "falaw[fal]",
     "httpx",
     "beautifulsoup4",
+    "songsrc",
 ]
 
 license = "MIT"
