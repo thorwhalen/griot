@@ -8,37 +8,23 @@ needs an artist, so it reads the subject and artist an earlier researcher
 
 from __future__ import annotations
 
-import re
 from typing import Any
+
+from songsrc import parse_lrc as _parse_lrc
 
 from ..dossier import Dossier, Source, TimedLine
 from . import Http, register_researcher
 from .wikipedia import split_topic
 
 API = "https://lrclib.net/api"
-_LRC_LINE = re.compile(r"^\[(\d+):(\d+(?:\.\d+)?)\](.*)$")
 
 
 def parse_lrc(synced: str) -> list[TimedLine]:
-    """Parse an LRC blob into :class:`TimedLine` rows with computed end times.
-
-    Empty-text timestamps still advance the clock (so the previous line's
-    ``end_s`` reflects the real gap) but are not lyric rows.
-    """
-    stamped: list[tuple[float, str]] = []
-    for raw in synced.splitlines():
-        m = _LRC_LINE.match(raw.strip())
-        if not m:
-            continue
-        minutes, seconds, text = m.groups()
-        stamped.append((round(int(minutes) * 60 + float(seconds), 3), text.strip()))
-    stamped.sort(key=lambda t: t[0])
-    rows: list[TimedLine] = []
-    for i, (start, text) in enumerate(stamped):
-        end = stamped[i + 1][0] if i + 1 < len(stamped) else None
-        if text:
-            rows.append(TimedLine(index=len(rows), start_s=start, end_s=end, text=text))
-    return rows
+    """Parse an LRC blob into :class:`TimedLine` rows (``songsrc.parse_lrc`` under the dossier's row type)."""
+    return [
+        TimedLine(index=r.index, start_s=r.start_s, end_s=r.end_s, text=r.text)
+        for r in _parse_lrc(synced)
+    ]
 
 
 def fetch_synced(http: Http, *, track: str, artist: str) -> dict[str, Any] | None:
