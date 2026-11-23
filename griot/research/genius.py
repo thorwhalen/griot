@@ -43,6 +43,7 @@ BROWSER_UA = (
 
 MAX_ANNOTATIONS = 24
 
+
 def _api(token: str | None) -> tuple[str, dict[str, str]]:
     """``(base_url, headers)`` — the official API when a token is set, else the public one."""
     if token:
