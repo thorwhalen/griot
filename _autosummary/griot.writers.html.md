@@ -55,7 +55,7 @@ A fal any-llm id with a per-token rate in falaw’s table; the seam is `Writer.m
 
 What a full dossier (a lead, lyrics, timed lines, annotations) adds to the prompt, as an upper bound.
 
-### *class* griot.writers.Draft(script, picture_hints, report, dossier, writer, model, minutes, revisions=0, cost_usd_actual=0.0, sources_used=(), dropped=(), raw=<factory>)
+### *class* griot.writers.Draft(script, picture_hints, report, dossier, writer, model, minutes, revisions=0, cost_usd_actual=0.0, sources_used=(), dropped=(), raw=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 

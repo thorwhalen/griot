@@ -40,42 +40,72 @@ Everything the writer may lean on, and nothing it may not.
 
 the user’s words, untouched.
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 #### subject
 
 the resolved title (a page, a song), or `None` if nothing
 resolved.
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### artist
 
 the performer / author, when the subject is a work.
+
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### summary
 
 the lead paragraphs, plain text.
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 #### facts
 
 sentences worth citing, each with its source page.
+
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Fact`](#griot.dossier.Fact), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
 
 #### lyrics
 
 the full lyric text, verbatim, when the subject is a song.
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### annotations
 
 per-line commentary (Genius), best first.
+
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Annotation`](#griot.dossier.Annotation), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
 
 #### timed_lines
 
 synced lyric lines, when a timing source was found.
 
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`TimedLine`](#griot.dossier.TimedLine), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
+
 #### sources
 
 every page consulted.
 
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Source`](#griot.dossier.Source), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
+
 #### missing
 
 what was looked for and not found — the writer is told.
+
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
 
 #### as_brief(, max_annotations=16, annotation_chars=550)
 

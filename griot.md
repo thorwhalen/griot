@@ -1,4 +1,4 @@
-> built 2026-10-03 07:56 UTC from dda026e (main) · griot 0.0.4. Details: build_info.json
+> built 2026-11-23 22:36 UTC from bb743eb (main) · griot 0.0.5. Details: build_info.json
 
 # index.html.md
 
@@ -103,42 +103,72 @@ Everything the writer may lean on, and nothing it may not.
 
 the user’s words, untouched.
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 #### subject
 
 the resolved title (a page, a song), or `None` if nothing
 resolved.
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### artist
 
 the performer / author, when the subject is a work.
+
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### summary
 
 the lead paragraphs, plain text.
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 #### facts
 
 sentences worth citing, each with its source page.
+
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Fact`](_autosummary/griot.dossier.html.md#griot.dossier.Fact), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
 
 #### lyrics
 
 the full lyric text, verbatim, when the subject is a song.
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### annotations
 
 per-line commentary (Genius), best first.
+
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Annotation`](_autosummary/griot.dossier.html.md#griot.dossier.Annotation), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
 
 #### timed_lines
 
 synced lyric lines, when a timing source was found.
 
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`TimedLine`](_autosummary/griot.dossier.html.md#griot.dossier.TimedLine), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
+
 #### sources
 
 every page consulted.
 
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Source`](_autosummary/griot.dossier.html.md#griot.dossier.Source), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
+
 #### missing
 
 what was looked for and not found — the writer is told.
+
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
 
 #### as_brief(, max_annotations=16, annotation_chars=550)
 
@@ -339,42 +369,72 @@ Everything the writer may lean on, and nothing it may not.
 
 the user’s words, untouched.
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 #### subject
 
 the resolved title (a page, a song), or `None` if nothing
 resolved.
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### artist
 
 the performer / author, when the subject is a work.
+
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### summary
 
 the lead paragraphs, plain text.
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 #### facts
 
 sentences worth citing, each with its source page.
+
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Fact`](_autosummary/griot.dossier.html.md#griot.dossier.Fact), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
 
 #### lyrics
 
 the full lyric text, verbatim, when the subject is a song.
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### annotations
 
 per-line commentary (Genius), best first.
+
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Annotation`](_autosummary/griot.dossier.html.md#griot.dossier.Annotation), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
 
 #### timed_lines
 
 synced lyric lines, when a timing source was found.
 
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`TimedLine`](_autosummary/griot.dossier.html.md#griot.dossier.TimedLine), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
+
 #### sources
 
 every page consulted.
 
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Source`](_autosummary/griot.dossier.html.md#griot.dossier.Source), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
+
 #### missing
 
 what was looked for and not found — the writer is told.
+
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
 
 #### as_brief(, max_annotations=16, annotation_chars=550)
 
@@ -405,7 +465,7 @@ Plain JSON-able form.
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
-### *class* griot.Draft(script, picture_hints, report, dossier, writer, model, minutes, revisions=0, cost_usd_actual=0.0, sources_used=(), dropped=(), raw=<factory>)
+### *class* griot.Draft(script, picture_hints, report, dossier, writer, model, minutes, revisions=0, cost_usd_actual=0.0, sources_used=(), dropped=(), raw=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -782,7 +842,7 @@ A fal any-llm id with a per-token rate in falaw’s table; the seam is `Writer.m
 
 What a full dossier (a lead, lyrics, timed lines, annotations) adds to the prompt, as an upper bound.
 
-### *class* griot.writers.Draft(script, picture_hints, report, dossier, writer, model, minutes, revisions=0, cost_usd_actual=0.0, sources_used=(), dropped=(), raw=<factory>)
+### *class* griot.writers.Draft(script, picture_hints, report, dossier, writer, model, minutes, revisions=0, cost_usd_actual=0.0, sources_used=(), dropped=(), raw=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -880,18 +940,18 @@ Research → this. Write, gate, revise at most `max_revisions` times, return the
 
 # About this build
 
-This documentation was built on **2026-10-03 07:56 UTC** from commit <a href="https://github.com/thorwhalen/griot/commit/dda026e0dedd2bf1b1a8af9be7d0eabbe360f855"><code>dda026e</code></a> on branch <code>main</code>, for **griot 0.0.4** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-11-23 22:36 UTC** from commit <a href="https://github.com/thorwhalen/griot/commit/bb743ebe5484665770778d1b4f12e204918ef717"><code>bb743eb</code></a> on branch <code>main</code>, for **griot 0.0.5** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.0.4) is behind the latest release on PyPI (0.0.5): `pip install griot` gives newer code than these docs describe.
+- The documented version (0.0.5) is behind the latest release on PyPI (0.0.6): `pip install griot` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/griot/commit/dda026e0dedd2bf1b1a8af9be7d0eabbe360f855"><code>dda026e0dedd2bf1b1a8af9be7d0eabbe360f855</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/griot/commit/bb743ebe5484665770778d1b4f12e204918ef717"><code>bb743ebe5484665770778d1b4f12e204918ef717</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -902,18 +962,18 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/griot</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/griot/actions/runs/37107927621">37107927621</a>     |
+| Run          | <a href="https://github.com/thorwhalen/griot/actions/runs/45280937054">45280937054</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>dda026e0dedd2bf1b1a8af9be7d0eabbe360f855</code> (in the history of the built commit) |
+| Event commit | <code>bb743ebe5484665770778d1b4f12e204918ef717</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.12  |
-| Sphinx   | 9.1.0   |
+| epythet  | 0.2.25  |
+| Sphinx   | 9.1.1   |
 | docutils | 0.22.4  |
-| Python   | 3.12.14 |
+| Python   | 3.12.16 |
 
 ## Configuration as resolved
 
@@ -929,14 +989,14 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/griot/0.0.5/">0.0.5</a>, newer than the documented version (0.0.4).
+Latest release: <a href="https://pypi.org/project/griot/0.0.6/">0.0.6</a>, newer than the documented version (0.0.5).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/griot && cd griot
-git checkout dda026e0dedd2bf1b1a8af9be7d0eabbe360f855
-pip install "epythet==0.2.12"
+git checkout bb743ebe5484665770778d1b4f12e204918ef717
+pip install "epythet==0.2.25"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 
